@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package echo;
+
+//定義了一個 EchoServer
+service EchoEvent {
+    rpc Echo (EchoRequest) returns(EchoReply){}
+}
+
+//定義了 Echo Server EchoRequest
+message EchoRequest {
+    string message = 1;
+}
+
+//定義了 Echo Response
+//這裡多回傳了一個 叫做 unixtime
+message EchoReply {
+    string message = 1;
+    int64 unixtime = 2;
+}
