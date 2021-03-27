@@ -2,8 +2,8 @@ package main_test
 
 import (
 	"testing"
-	"yangServer/image/png"
 	"yangServer/net"
+	"yangServer/output/image/png"
 )
 
 // 從網路抓圖片存到本機
