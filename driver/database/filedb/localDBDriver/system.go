@@ -8,7 +8,7 @@ import (
 	"os"
 	"strconv"
 	"strings"
-	"yangServer/service/database/filedb/constant"
+	"yangServer/driver/database/filedb/constant"
 )
 
 func (self *Driver) NewCollection(collection string) error {

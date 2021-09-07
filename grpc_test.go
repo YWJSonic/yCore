@@ -6,8 +6,8 @@ import (
 	"log"
 	"testing"
 	"time"
+	igrpc "yangServer/driver/connect/grpc"
 	echo "yangServer/proto"
-	igrpc "yangServer/service/connect/grpc"
 
 	"google.golang.org/grpc"
 )

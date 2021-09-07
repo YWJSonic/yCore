@@ -2,7 +2,7 @@ package example
 
 import (
 	"fmt"
-	"yangServer/service/database/filedb/localDBDriver"
+	"yangServer/driver/database/filedb/localDBDriver"
 )
 
 type LocalDB struct {
