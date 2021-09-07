@@ -8,7 +8,7 @@ import (
 )
 
 func TestRss(t *testing.T) {
-	doc, err := net.GetWebPackage("https://gnn.gamer.com.tw/rss.xml")
+	_, doc, err := net.GetWebPackage("https://gnn.gamer.com.tw/rss.xml")
 	if err != nil {
 		fmt.Println(err)
 		return

@@ -8,12 +8,16 @@ import (
 )
 
 func Test_Web(t *testing.T) {
-	url := "https://www.alphapolis.co.jp/manga/official"
-	doc, err := net.GetWebPackage(url)
+	url := "https://union.591.com.tw/stats/event?c=page-pc&a=page-4&l=page-1&_u=q13broe0dcg04oh5fjrh25gom4"
+	header, doc, err := net.GetWebPackage(url)
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
+	for k, v := range header {
+		fmt.Println(k, v)
+	}
+	fmt.Println(string(doc))
 	htmlTree := web.Format(doc, url)
 
 	nods := web.FindByNode(web.FindOption{
