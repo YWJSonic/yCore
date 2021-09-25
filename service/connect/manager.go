@@ -8,6 +8,3 @@ type MqueueManager struct {
 
 type RestfulManager struct {
 }
-
-type SocketManager struct {
-}
