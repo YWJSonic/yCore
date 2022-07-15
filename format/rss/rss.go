@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"encoding/xml"
 	"fmt"
-	"yangServer/structObj"
+	"yangServer/datastruct/myqueue"
 )
 
 type NodeType uint8
@@ -30,7 +30,7 @@ func Format(pageData []byte) (*RssInfo, error) {
 	decoder := xml.NewDecoder(bytes.NewBuffer(pageData))
 	var priveNode *NodeInfo
 	var currentNode *NodeInfo
-	qu := structObj.Queue{}
+	qu := myqueue.Queue{}
 	for {
 		// Read tokens from the XML document in a stream.
 		t, _ := decoder.Token()

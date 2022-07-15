@@ -5,7 +5,7 @@ import (
 	"os"
 	"strings"
 	"yangServer/load/project/goloader"
-	"yangServer/tool"
+	"yangServer/util"
 )
 
 // 專案節點樹分析 廣度優先
@@ -35,7 +35,7 @@ func GoAnalysisSpaceFirst(node *goloader.GoFileNode) {
 
 		} else if currentChild.FileType == "go" { // 檔案節點
 			// 讀檔
-			codeLine := tool.ReadFileToLineStr(currentChild.Path())
+			codeLine := util.ReadFileToLineStr(currentChild.Path())
 			// 檔案分析
 			GoCodeAnalysis(codeLine)
 		}
@@ -52,7 +52,7 @@ func GoAnalysisDepthFirst(node *goloader.GoFileNode) {
 
 	if node.FileType == "go" { // 檔案節點
 		// 讀檔
-		codeLine := tool.ReadFileToLineStr(node.Path())
+		codeLine := util.ReadFileToLineStr(node.Path())
 		// 檔案分析
 		GoCodeAnalysis(codeLine)
 	}
