@@ -12,40 +12,34 @@ import (
 	"github.com/go-redis/redis/v8"
 )
 
-var Instance *manager
-
 // New redis manager
-func New(addr, password string, poolSize int) error {
-
-	if Instance != nil {
-		return nil
-	}
+func New(addr, password string, poolSize int) (*Manager, error) {
 
 	ctx, cancel := context.WithCancel(context.TODO())
-	Instance = &manager{
+	obj := &Manager{
 		redisClient: nil,
 		ctx:         ctx,
 	}
 
-	redisClient, err := Instance.init(addr, password, poolSize, ctx, cancel)
+	redisClient, err := obj.init(addr, password, poolSize, ctx, cancel)
 	if err != nil {
 		fmt.Printf("[Redis][New] Init error: %v", err)
-		return err
+		return nil, err
 	}
 
-	Instance.redisClient = redisClient
+	obj.redisClient = redisClient
 
 	fmt.Printf("[Redis][New] Connect success, address: %v", addr)
-	return nil
+	return obj, nil
 }
 
-type manager struct {
+type Manager struct {
 	redisClient redis.Cmdable
 	ctx         context.Context
 	mu          sync.RWMutex
 }
 
-func (mgr *manager) init(addr, password string, poolSize int, ctx context.Context, cancel context.CancelFunc) (redis.Cmdable, error) {
+func (mgr *Manager) init(addr, password string, poolSize int, ctx context.Context, cancel context.CancelFunc) (redis.Cmdable, error) {
 	redisIPs := strings.Split(addr, ",")
 	for _, ip := range redisIPs {
 		_, err := url.Parse("http://" + ip)
@@ -68,7 +62,7 @@ func (mgr *manager) init(addr, password string, poolSize int, ctx context.Contex
 	return client, nil
 }
 
-func (mgr *manager) connection(redisIPs []string, password string, poolSize int) (redis.Cmdable, error) {
+func (mgr *Manager) connection(redisIPs []string, password string, poolSize int) (redis.Cmdable, error) {
 	switch len(redisIPs) {
 	case 0: // error
 		return nil, errors.New("[Redis][connection] IP address null")
