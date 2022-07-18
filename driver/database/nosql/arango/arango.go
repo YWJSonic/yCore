@@ -35,12 +35,12 @@ func New(addr, username, password, database string) (*Manager, error) {
 		return nil, err
 	}
 
-	obj.db = db
+	obj.Client = db
 	fmt.Printf("[Arango][New] Connect success, address: %v, database: %v", addr, database)
 
 	return obj, nil
 }
 
 type Manager struct {
-	db driver.Database
+	Client driver.Database
 }

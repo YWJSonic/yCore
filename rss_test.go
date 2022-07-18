@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"testing"
 	"yangServer/format/rss"
-	"yangServer/net"
+	"yangServer/module/myhtml"
 )
 
 func TestRss(t *testing.T) {
-	_, doc, err := net.GetWebPackage("https://gnn.gamer.com.tw/rss.xml")
+	_, doc, err := myhtml.GetWebPackage("https://gnn.gamer.com.tw/rss.xml")
 	if err != nil {
 		fmt.Println(err)
 		return
