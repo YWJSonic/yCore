@@ -6,7 +6,6 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	"yangServer/dao"
 	"yangServer/module/myhtml"
 	"yangServer/types"
 
@@ -83,9 +82,9 @@ func Login(device string) LoginData {
 	}
 	defer res.Body.Close()
 
-	loginHtml := html.NewTokenizer(res.Body)
+	// loginHtml := html.NewTokenizer(res.Body)
 
-	filters := map[types.TokenTypeName]*dao.FilterObj{
+	filters := map[types.TokenTypeName]*myhtml.FilterObj{
 		"meta": {
 			FiltAttrs: []html.Attribute{
 				{
@@ -95,7 +94,7 @@ func Login(device string) LoginData {
 			},
 		},
 	}
-	myhtml.HtmlLoopFilterOne(loginHtml, filters)
+	// myhtml.HtmlLoopFilterOne(loginHtml, filters)
 	for _, htmlToken := range filters["meta"].Res {
 		for _, attr := range htmlToken.Attr {
 			if attr.Key == "content" {

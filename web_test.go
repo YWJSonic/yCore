@@ -4,12 +4,12 @@ import (
 	"fmt"
 	"testing"
 	"yangServer/format/web"
-	"yangServer/net"
+	"yangServer/module/myhtml"
 )
 
 func Test_Web(t *testing.T) {
 	url := "https://union.591.com.tw/stats/event?c=page-pc&a=page-4&l=page-1&_u=q13broe0dcg04oh5fjrh25gom4"
-	header, doc, err := net.GetWebPackage(url)
+	header, doc, err := myhtml.GetWebPackage(url)
 	if err != nil {
 		fmt.Println(err)
 		return
