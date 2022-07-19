@@ -3,8 +3,8 @@ package main_test
 import (
 	"fmt"
 	"testing"
-	"yangServer/format/rss"
-	"yangServer/module/myhtml"
+	"ycore/format/rss"
+	"ycore/module/myhtml"
 )
 
 func TestRss(t *testing.T) {

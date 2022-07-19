@@ -6,8 +6,8 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	"yangServer/module/myhtml"
-	"yangServer/types"
+	"ycore/module/myhtml"
+	"ycore/types"
 
 	"golang.org/x/net/html"
 )

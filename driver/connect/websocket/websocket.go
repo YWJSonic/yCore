@@ -9,9 +9,9 @@ import (
 	"os"
 	"os/signal"
 	"time"
-	"yangServer/dao"
-	"yangServer/driver/connect/websocket/socketclient"
-	"yangServer/driver/connect/websocket/socketserver"
+	"ycore/dao"
+	"ycore/driver/connect/websocket/socketclient"
+	"ycore/driver/connect/websocket/socketserver"
 )
 
 type ApiCallBack interface {

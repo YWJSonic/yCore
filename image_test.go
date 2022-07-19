@@ -2,8 +2,8 @@ package main_test
 
 import (
 	"testing"
-	"yangServer/module/myhtml"
-	"yangServer/output/image/png"
+	"ycore/module/myhtml"
+	"ycore/output/image/png"
 )
 
 // 從網路抓圖片存到本機

@@ -1,4 +1,4 @@
-module yangServer
+module ycore
 
 go 1.18
 

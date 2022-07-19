@@ -1,5 +1,7 @@
 package main
 
-func main() {
+import "ycore/analysis/web/coolpc"
 
+func main() {
+	coolpc.GetWeb()
 }

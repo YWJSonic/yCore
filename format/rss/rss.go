@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"encoding/xml"
 	"fmt"
-	"yangServer/datastruct/myqueue"
+	"ycore/datastruct/myqueue"
 )
 
 type NodeType uint8

@@ -6,7 +6,7 @@ import (
 	"strconv"
 	"strings"
 	"time"
-	"yangServer/module/myhtml"
+	"ycore/module/myhtml"
 )
 
 func main_web591() {

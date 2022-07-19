@@ -3,7 +3,7 @@ package socketserver
 import (
 	"fmt"
 	"net/http"
-	"yangServer/driver/connect/websocket/socketclient"
+	"ycore/driver/connect/websocket/socketclient"
 
 	"nhooyr.io/websocket"
 )

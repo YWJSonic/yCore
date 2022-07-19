@@ -2,7 +2,7 @@ package websocket
 
 import (
 	"context"
-	"yangServer/driver/connect/websocket/socketclient"
+	"ycore/driver/connect/websocket/socketclient"
 )
 
 func (self *WebsocketManager) ReceiveMessage(ctx context.Context, socketClient *socketclient.Handler, message []byte) {

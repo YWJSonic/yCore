@@ -1,7 +1,7 @@
 package websocket
 
 import (
-	"yangServer/driver/connect/websocket/socketclient"
+	"ycore/driver/connect/websocket/socketclient"
 )
 
 // Websocker Server 有新連線

@@ -2,7 +2,7 @@ package timecount
 
 import (
 	"time"
-	"yangServer/util"
+	"ycore/util"
 )
 
 // 生成新計時器

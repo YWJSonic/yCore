@@ -3,8 +3,8 @@ package main_test
 import (
 	"fmt"
 	"testing"
-	"yangServer/format/web"
-	"yangServer/module/myhtml"
+	"ycore/format/web"
+	"ycore/module/myhtml"
 )
 
 func Test_Web(t *testing.T) {

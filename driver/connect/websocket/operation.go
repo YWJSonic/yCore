@@ -2,8 +2,8 @@ package websocket
 
 import (
 	"fmt"
-	"yangServer/constant"
-	"yangServer/driver/connect/websocket/socketclient"
+	"ycore/constant"
+	"ycore/driver/connect/websocket/socketclient"
 )
 
 // 通知 Websocket Manager 有連線被中斷

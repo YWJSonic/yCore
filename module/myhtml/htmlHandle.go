@@ -3,8 +3,8 @@ package myhtml
 import (
 	"io"
 	"log"
-	"yangServer/types"
-	"yangServer/util"
+	"ycore/types"
+	"ycore/util"
 
 	"golang.org/x/net/html"
 )

@@ -2,8 +2,8 @@ package main
 
 import (
 	"testing"
-	"yangServer/analysis/goanalysis"
-	"yangServer/load/project/goloader"
+	"ycore/analysis/goanalysis"
+	"ycore/load/project/goloader"
 )
 
 func TestGolandAnalysis(t *testing.T) {

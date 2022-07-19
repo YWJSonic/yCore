@@ -8,10 +8,10 @@ import (
 	"strconv"
 	"strings"
 	"sync"
-	"yangServer/driver/database/nosql/arango"
-	"yangServer/module/myhtml"
-	"yangServer/types"
-	"yangServer/util"
+	"ycore/driver/database/nosql/arango"
+	"ycore/module/myhtml"
+	"ycore/types"
+	"ycore/util"
 
 	"golang.org/x/net/html"
 )
