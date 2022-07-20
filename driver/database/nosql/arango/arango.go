@@ -46,9 +46,9 @@ type Manager struct {
 }
 
 // Quary Insert
-func (self *Manager) Insert(sgfe context.Context, collection string, doc interface{}) error {
+func (self *Manager) Insert(ctx context.Context, collection string, doc interface{}) error {
 	_, err := self.Client.Query(
-		sgfe,
+		ctx,
 		"Insert @doc Into @@collection",
 		map[string]interface{}{
 			"doc":         doc,
