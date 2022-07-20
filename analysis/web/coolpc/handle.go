@@ -18,7 +18,7 @@ import (
 
 func GetWeb() {
 
-	dbManager, err := arango.New("http://34.146.44.103:8529", "", "", "WebData")
+	dbManager, err := arango.New("http://10.146.0.2:8529", "", "", "WebData")
 	if err != nil {
 		return
 	}
