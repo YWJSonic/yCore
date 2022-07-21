@@ -3,24 +3,18 @@ package nats
 import (
 	"errors"
 	"log"
-	"time"
 
 	"github.com/nats-io/nats.go"
 	"github.com/nats-io/stan.go"
 )
 
-type NatsModule struct {
-	conn              stan.Conn
-	managementTimeOut time.Duration
-}
-
-func New() *NatsModule {
-	module := &NatsModule{}
+func New() *NatsDriver {
+	module := &NatsDriver{}
 
 	return module
 }
 
-func (self *NatsModule) LaunchNats(env *NatsEnv) error {
+func (self *NatsDriver) LaunchNats(env *NatsEnv) error {
 
 	if env.Addr == "" {
 		return errors.New(".env NATS_ADDR is nil")
