@@ -20,26 +20,26 @@ func New() *NatsModule {
 	return module
 }
 
-func (self *NatsModule) LaunchNats(addr, username, password, stanClusterID, clientID string) error {
+func (self *NatsModule) LaunchNats(env *NatsEnv) error {
 
-	if addr == "" {
+	if env.Addr == "" {
 		return errors.New(".env NATS_ADDR is nil")
 	}
 
-	nats, err := nats.Connect(addr, nats.UserInfo(username, password))
+	nats, err := nats.Connect(env.Addr, nats.UserInfo(env.Username, env.Password))
 	if err != nil {
 		log.Fatalf("[Nats][LaunchNats] nats.Connect failed err: %v", err)
 	}
 
-	if stanClusterID == "" {
+	if env.StanClusterID == "" {
 		return errors.New(".env NATS_CLUSTER_ID is nil")
 	}
 
 	conn, err := stan.Connect(
-		stanClusterID,
-		clientID,
+		env.StanClusterID,
+		env.ClientID,
 		stan.NatsConn(nats),
-		stan.Pings(3, 3),
+		stan.Pings(env.PingsInterval, env.PingsMaxOut),
 		stan.SetConnectionLostHandler(func(_ stan.Conn, reason error) {
 			log.Fatalf("[Nats][LaunchNats] Connection lost, reason: %v", reason)
 		}))
