@@ -7,7 +7,7 @@ import (
 
 func TestLocal(t *testing.T) {
 	db := NewDriver(struct{ Path string }{Path: "./"})
-	db.NewCollection("testCollection")
+	_ = db.NewCollection("testCollection")
 
 	head := newFileHead()
 	head.Incr = 999

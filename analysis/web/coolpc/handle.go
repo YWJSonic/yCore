@@ -83,7 +83,7 @@ func GetWeb() {
 
 							// 有價格的才是實際商品
 							if price > 0 {
-								dbManager.Insert(context.TODO(), "Coolpc",
+								_ = dbManager.Insert(context.TODO(), "Coolpc",
 									CacheStruct{
 										UpdateTime: datetime,
 										TypeName:   typeName,

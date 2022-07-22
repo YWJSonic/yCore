@@ -18,5 +18,5 @@ func NewImage(data []byte, filePath, fileName string) {
 		panic(err)
 	}
 	defer f.Close()
-	jpeg.Encode(f, img, nil)
+	_ = jpeg.Encode(f, img, nil)
 }

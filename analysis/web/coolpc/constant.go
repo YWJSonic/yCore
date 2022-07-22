@@ -3,7 +3,7 @@ package coolpc
 var WebPage = "https://www.coolpc.com.tw/evaluate.php"
 
 const (
-	checkTimeTag = "Mdy"
+	CheckTimeTag = "Mdy"
 )
 
 const (

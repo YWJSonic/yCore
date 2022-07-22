@@ -23,5 +23,5 @@ type FindOption struct {
 
 type HtmlTree struct {
 	Root *html.Node
-	url  string
+	// url  string
 }

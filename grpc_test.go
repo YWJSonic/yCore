@@ -27,7 +27,7 @@ func GoGrpcServer() {
 		return nil
 	}
 
-	igrpc.NewGRPCServer(port, newGrpcServerFun)
+	_ = igrpc.NewGRPCServer(port, newGrpcServerFun)
 }
 
 type Echo struct{}
@@ -45,7 +45,7 @@ func GoGrpcClient() {
 		ecc = echo.NewEchoEventClient(grpcClient)
 		return nil
 	}
-	igrpc.NewGRPCClient(port, newGrpcClientFun)
+	_ = igrpc.NewGRPCClient(port, newGrpcClientFun)
 
 	r, err := ecc.Echo(context.Background(), &echo.EchoRequest{Message: "123"})
 	if err != nil {

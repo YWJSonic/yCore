@@ -196,71 +196,71 @@ func HtmlLoopFilterOne(tokenizer *html.Tokenizer, filterMap map[types.TokenTypeN
 	}
 }
 
-func sameTargetProcess(tokenizer *html.Tokenizer, tokenType html.TokenType, token *html.Token, targetFilters []*FilterObj) {
+// func sameTargetProcess(tokenizer *html.Tokenizer, tokenType html.TokenType, token *html.Token, targetFilters []*FilterObj) {
 
-	switch token.Data {
-	case "script":
+// 	switch token.Data {
+// 	case "script":
 
-		for _, filter := range targetFilters {
+// 		for _, filter := range targetFilters {
 
-			// 找到目標 token
-			filter.Res = append(filter.Res, *token)
+// 			// 找到目標 token
+// 			filter.Res = append(filter.Res, *token)
 
-			// 取得內文
-			tokenizer.Next()
-			filter.Content = append(filter.Content, string(tokenizer.Raw()))
-		}
-	default:
+// 			// 取得內文
+// 			tokenizer.Next()
+// 			filter.Content = append(filter.Content, string(tokenizer.Raw()))
+// 		}
+// 	default:
 
-		for _, filter := range targetFilters {
-			// 找到目標 token
-			filter.Res = append(filter.Res, *token)
-		}
+// 		for _, filter := range targetFilters {
+// 			// 找到目標 token
+// 			filter.Res = append(filter.Res, *token)
+// 		}
 
-		tokenizer.Next()
-		for _, filter := range targetFilters {
-			isContent := (util.FastSearchWithInt(FilterOperation_GetContent, filter.Operation)) != -1
-			if isContent {
-				// 取得內文
+// 		tokenizer.Next()
+// 		for _, filter := range targetFilters {
+// 			isContent := (util.FastSearchWithInt(FilterOperation_GetContent, filter.Operation)) != -1
+// 			if isContent {
+// 				// 取得內文
 
-				for _, filter := range targetFilters {
-					filter.Content = append(filter.Content, string(tokenizer.Raw()))
-				}
-			}
-		}
+// 				for _, filter := range targetFilters {
+// 					filter.Content = append(filter.Content, string(tokenizer.Raw()))
+// 				}
+// 			}
+// 		}
 
-		// 底下子物件
-		for {
-			subtokenType := tokenizer.Next()
-			subtoken := tokenizer.Token()
+// 		// 底下子物件
+// 		for {
+// 			subtokenType := tokenizer.Next()
+// 			subtoken := tokenizer.Token()
 
-			// 主標籤結束
-			if subtokenType == html.EndTagToken && subtoken.Data == token.Data {
-				break
-			}
+// 			// 主標籤結束
+// 			if subtokenType == html.EndTagToken && subtoken.Data == token.Data {
+// 				break
+// 			}
 
-			// 排除不是標籤開頭的流程
-			if subtokenType != html.StartTagToken {
-				continue
-			}
+// 			// 排除不是標籤開頭的流程
+// 			if subtokenType != html.StartTagToken {
+// 				continue
+// 			}
 
-			for _, filter := range targetFilters {
-				isSubToken := (util.FastSearchWithInt(FilterOperation_GetSubToken, filter.Operation)) != -1
-				isSubContent := (util.FastSearchWithInt(FilterOperation_GetSubcContent, filter.Operation)) != -1
+// 			for _, filter := range targetFilters {
+// 				isSubToken := (util.FastSearchWithInt(FilterOperation_GetSubToken, filter.Operation)) != -1
+// 				isSubContent := (util.FastSearchWithInt(FilterOperation_GetSubcContent, filter.Operation)) != -1
 
-				if isSubToken {
-					filter.SubRes = append(filter.SubRes, subtoken)
-				}
+// 				if isSubToken {
+// 					filter.SubRes = append(filter.SubRes, subtoken)
+// 				}
 
-				if isSubContent {
-					tokenizer.Next()
-					filter.SubContent = append(filter.SubContent, string(tokenizer.Raw()))
-				}
+// 				if isSubContent {
+// 					tokenizer.Next()
+// 					filter.SubContent = append(filter.SubContent, string(tokenizer.Raw()))
+// 				}
 
-			}
-		}
-	}
-}
+// 			}
+// 		}
+// 	}
+// }
 
 func AttrCompare(targetAttr html.Attribute, token html.Token) bool {
 	for _, attr := range token.Attr {

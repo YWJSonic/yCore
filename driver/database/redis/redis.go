@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"net/url"
 	"strings"
-	"sync"
 	"time"
 
 	"github.com/go-redis/redis/v8"
@@ -36,7 +35,7 @@ func New(addr, password string, poolSize int) (*Manager, error) {
 type Manager struct {
 	redisClient redis.Cmdable
 	ctx         context.Context
-	mu          sync.RWMutex
+	// mu          sync.RWMutex
 }
 
 func (mgr *Manager) init(addr, password string, poolSize int, ctx context.Context, cancel context.CancelFunc) (redis.Cmdable, error) {

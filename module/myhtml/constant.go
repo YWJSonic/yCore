@@ -1,7 +1,5 @@
 package myhtml
 
-import "golang.org/x/net/html"
-
 // Filter Operation
 const (
 	FilterOperation_GetContent     int = 1 // 取得目標標籤內文
@@ -10,12 +8,12 @@ const (
 
 )
 
-var typeMap map[html.NodeType]string = map[html.NodeType]string{
-	html.ErrorNode:    "ErrorNode",
-	html.TextNode:     "TextNode",
-	html.DocumentNode: "DocumentNode",
-	html.ElementNode:  "ElementNode",
-	html.CommentNode:  "CommentNode",
-	html.DoctypeNode:  "DoctypeNode",
-	html.RawNode:      "RawNode",
-}
+// var typeMap map[html.NodeType]string = map[html.NodeType]string{
+// 	html.ErrorNode:    "ErrorNode",
+// 	html.TextNode:     "TextNode",
+// 	html.DocumentNode: "DocumentNode",
+// 	html.ElementNode:  "ElementNode",
+// 	html.CommentNode:  "CommentNode",
+// 	html.DoctypeNode:  "DoctypeNode",
+// 	html.RawNode:      "RawNode",
+// }

@@ -15,7 +15,7 @@ func main() {
 	router := restful.New()
 	router.Handle(http.MethodGet, "/balance/", getBalance)
 
-	router.Run(":9123")
+	_ = router.Run(":9123")
 }
 
 func getBalance(context *gin.Context) {

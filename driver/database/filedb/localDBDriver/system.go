@@ -48,7 +48,7 @@ func (self *Driver) Set(collection string, key string, data interface{}) (interf
 		head.Incr++
 		key = strconv.FormatInt(head.Incr, 10)
 		path = fmt.Sprintf("%v%v/%v", self.path, collection, key)
-		self.setHead(collection, head)
+		_ = self.setHead(collection, head)
 	}
 
 	err = ioutil.WriteFile(path, byteData, 0666)

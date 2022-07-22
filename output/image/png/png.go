@@ -20,5 +20,5 @@ func NewImage(data []byte, filePath, fileName string) {
 	}
 	defer f.Close()
 
-	png.Encode(f, img)
+	_ = png.Encode(f, img)
 }
