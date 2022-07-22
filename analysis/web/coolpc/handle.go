@@ -65,9 +65,12 @@ func GetWeb() {
 		dataMap = spliteScriptData(data)
 	}
 
+	datetime := util.ParseJavaUnixSec(util.ServerTimeNow())
+	date := util.ServerTimeNow().Format("2006-01-02")
+	collectionName := "Coolpc"
 	wg := sync.WaitGroup{}
 	wg.Add(len(filters["select"]))
-	datetime := util.ParseJavaUnixSec(util.ServerTimeNow())
+
 	for idx, filter := range filters["select"] {
 		idx++
 		go func(idx int, filter *myhtml.FilterObj) {
@@ -83,14 +86,29 @@ func GetWeb() {
 
 							// 有價格的才是實際商品
 							if price > 0 {
-								_ = dbManager.Insert(context.TODO(), "Coolpc",
-									CacheStruct{
-										UpdateTime: datetime,
-										TypeName:   typeName,
-										TypeId:     idx,
-										Price:      data[v],
-										Name:       filter.SubContent[subidx],
-									})
+								nsmaSplite := strings.Split(filter.SubContent[subidx], ",")
+								if len(nsmaSplite) >= 2 {
+									_ = dbManager.Insert(context.TODO(), collectionName,
+										CacheStruct{
+											Date:       date,
+											UpdateTime: datetime,
+											TypeName:   typeName,
+											TypeId:     idx,
+											Price:      data[v],
+											PriceTag:   nsmaSplite[1],
+											Name:       nsmaSplite[0],
+										})
+								} else {
+									_ = dbManager.Insert(context.TODO(), collectionName,
+										CacheStruct{
+											Date:       date,
+											UpdateTime: datetime,
+											TypeName:   typeName,
+											TypeId:     idx,
+											Price:      data[v],
+											Name:       nsmaSplite[0],
+										})
+								}
 							}
 						}
 					}
