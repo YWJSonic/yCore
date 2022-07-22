@@ -8,7 +8,7 @@ import (
 	"strconv"
 	"strings"
 	"sync"
-	"ycore/driver/database/nosql/arango"
+	"ycore/module/mydb"
 	"ycore/module/myhtml"
 	"ycore/types"
 	"ycore/util"
@@ -18,7 +18,7 @@ import (
 
 func GetWeb() {
 
-	dbManager, err := arango.New("http://10.146.0.2:8529", "", "", "WebData")
+	dbManager, err := mydb.NewArangoDB("http://10.146.0.2:8529", "", "", "WebData")
 	if err != nil {
 		return
 	}

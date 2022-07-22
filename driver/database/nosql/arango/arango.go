@@ -8,10 +8,7 @@ import (
 	"github.com/arangodb/go-driver/http"
 )
 
-func New(addr, username, password, database string) (*Manager, error) {
-
-	obj := &Manager{}
-
+func New(addr, username, password, database string) (driver.Database, error) {
 	conn, err := http.NewConnection(http.ConnectionConfig{
 		Endpoints: []string{addr},
 	})
@@ -35,24 +32,6 @@ func New(addr, username, password, database string) (*Manager, error) {
 		return nil, err
 	}
 
-	obj.Client = db
 	fmt.Printf("[Arango][New] Connect success, address: %v, database: %v\n", addr, database)
-
-	return obj, nil
-}
-
-type Manager struct {
-	Client driver.Database
-}
-
-// Quary Insert
-func (self *Manager) Insert(ctx context.Context, collection string, doc interface{}) error {
-	_, err := self.Client.Query(
-		ctx,
-		"Insert @doc Into @@collection",
-		map[string]interface{}{
-			"doc":         doc,
-			"@collection": collection,
-		})
-	return err
+	return db, nil
 }

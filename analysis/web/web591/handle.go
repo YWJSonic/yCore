@@ -10,7 +10,7 @@ import (
 	"strconv"
 	"strings"
 	"time"
-	"ycore/driver/database/nosql/arango"
+	"ycore/module/mydb"
 	"ycore/module/myhtml"
 
 	"golang.org/x/net/html"
@@ -21,7 +21,7 @@ var reqWebCount = 0
 
 func GetData() {
 
-	dbManager, err := arango.New("http://10.146.0.2:8529", "", "", "WebData")
+	dbManager, err := mydb.NewArangoDB("http://10.146.0.2:8529", "", "", "WebData")
 	if err != nil {
 		return
 	}
