@@ -18,10 +18,12 @@ import (
 
 func GetWeb() {
 
+	coolpcDB := coolpcDbManager{}
 	dbManager, err := mydb.NewArangoDB("http://10.146.0.2:8529", "", "", "WebData")
 	if err != nil {
 		return
 	}
+	coolpcDB.Manager = dbManager
 
 	req, _ := http.NewRequest("GET", WebPage, nil)
 	res, err := http.DefaultClient.Do(req)
@@ -86,27 +88,27 @@ func GetWeb() {
 
 							// 有價格的才是實際商品
 							if price > 0 {
-								nsmaSplite := strings.Split(filter.SubContent[subidx], ",")
-								if len(nsmaSplite) >= 2 {
-									_ = dbManager.Insert(context.TODO(), collectionName,
+								nameSplite := strings.Split(filter.SubContent[subidx], ",")
+								if len(nameSplite) >= 2 {
+									_ = coolpcDB.Insert(context.TODO(), collectionName,
 										CacheStruct{
 											Date:       date,
 											UpdateTime: datetime,
 											TypeName:   typeName,
 											TypeId:     idx,
 											Price:      data[v],
-											PriceTag:   nsmaSplite[1],
-											Name:       nsmaSplite[0],
+											PriceTag:   nameSplite[1],
+											Name:       nameSplite[0],
 										})
 								} else {
-									_ = dbManager.Insert(context.TODO(), collectionName,
+									_ = coolpcDB.Insert(context.TODO(), collectionName,
 										CacheStruct{
 											Date:       date,
 											UpdateTime: datetime,
 											TypeName:   typeName,
 											TypeId:     idx,
 											Price:      data[v],
-											Name:       nsmaSplite[0],
+											Name:       nameSplite[0],
 										})
 								}
 							}
@@ -119,6 +121,37 @@ func GetWeb() {
 	}
 
 	wg.Wait()
+}
+
+func UpdateOldFrame() {
+	coolpcDB := &coolpcDbManager{}
+	dbManager, err := mydb.NewArangoDB("http://10.146.0.2:8529", "", "", "WebData")
+	if err != nil {
+		return
+	}
+	coolpcDB.Manager = dbManager
+	docs, err := coolpcDB.GetAllData(context.TODO(), "Coolpc")
+
+	for _, doc := range docs {
+		updatedata(coolpcDB, doc)
+	}
+
+}
+
+func updatedata(coolpcDB *coolpcDbManager, data *CacheStruct) {
+	if data.PriceTag != "" {
+		return
+	}
+
+	nameSplite := strings.Split(data.Name, ",")
+	if len(nameSplite) >= 2 {
+		data.PriceTag = nameSplite[1]
+		data.Name = nameSplite[0]
+		err := coolpcDB.Update(context.TODO(), "Coolpc", data.Key, data)
+		if err != nil {
+			fmt.Println(err)
+		}
+	}
 }
 
 func spliteScriptData(data string) map[string]interface{} {
