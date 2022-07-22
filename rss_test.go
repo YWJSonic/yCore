@@ -3,8 +3,8 @@ package main_test
 import (
 	"fmt"
 	"testing"
-	"ycore/format/rss"
 	"ycore/module/myhtml"
+	"ycore/module/myrss"
 )
 
 func TestRss(t *testing.T) {
@@ -14,11 +14,11 @@ func TestRss(t *testing.T) {
 		return
 	}
 
-	rssInfo, _ := rss.Format([]byte(doc))
+	rssInfo, _ := myrss.Format([]byte(doc))
 	print(0, rssInfo.Node)
 }
 
-func print(count int, nodes []*rss.NodeInfo) []*rss.NodeInfo {
+func print(count int, nodes []*myrss.NodeInfo) []*myrss.NodeInfo {
 	if nodes == nil {
 		return nil
 	}
