@@ -16,6 +16,7 @@ type CacheStruct struct {
 	PriceTag   string `json:"priceTag"`   // 價錢標籤(降價標示)
 	UpdateTime int64  `json:"updateTime"` // 更新時間
 	Date       string `json:"date"`       // 日期
+	OriginName string `json:"originName"` // 原始資料
 }
 
 type coolpcDbManager struct {

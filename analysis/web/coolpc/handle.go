@@ -99,6 +99,7 @@ func GetWeb() {
 											Price:      data[v],
 											PriceTag:   nameSplite[1],
 											Name:       nameSplite[0],
+											OriginName: filter.SubContent[subidx],
 										})
 								} else {
 									_ = coolpcDB.Insert(context.TODO(), collectionName,
@@ -109,6 +110,7 @@ func GetWeb() {
 											TypeId:     idx,
 											Price:      data[v],
 											Name:       nameSplite[0],
+											OriginName: filter.SubContent[subidx],
 										})
 								}
 							}
