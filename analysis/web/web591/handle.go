@@ -40,6 +40,7 @@ func GetData() {
 	homeResList := []string{}
 	count := 0
 	idx := 0
+	customMax := 60 // 指定查尋數量
 	var roomIds []int64
 	for {
 
@@ -99,10 +100,10 @@ func GetData() {
 		// 下一頁
 		count += 30
 
-		// 沒有下一頁
+		// 沒有下一頁 or 到了指定查詢數量
 		max, _ := strconv.Atoi(strings.ReplaceAll(payload.Records, ",", ""))
 		fmt.Println("[nextPage]Now Count", count, "Max Count:", max)
-		if count >= max {
+		if count >= max || count >= customMax {
 			break
 		}
 
