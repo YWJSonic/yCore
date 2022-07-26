@@ -1,13 +1,12 @@
-package main_test
+package example
 
 import (
 	"testing"
+	"ycore/driver/image/png"
 	"ycore/module/myhtml"
-	"ycore/output/image/png"
 )
 
-// 從網路抓圖片存到本機
-func Test_Image(t *testing.T) {
+func TestDo(t *testing.T) {
 	url := "https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png"
 	_, doc, _ := myhtml.GetWebPackage(url)
 	png.NewImage(doc, "./", "newimage")

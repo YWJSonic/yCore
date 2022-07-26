@@ -1,4 +1,4 @@
-package main
+package example
 
 import (
 	"context"
@@ -14,7 +14,7 @@ import (
 
 var port = "127.0.0.1:8080"
 
-func Test_Grpc(t *testing.T) {
+func TestDo(t *testing.T) {
 	go GoGrpcServer()
 	GoGrpcClient()
 }
