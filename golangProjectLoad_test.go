@@ -2,7 +2,7 @@ package main
 
 import (
 	"testing"
-	"ycore/load/project/goloader"
+	"ycore/driver/load/project/goloader"
 )
 
 func TestGolandProjectLoad(t *testing.T) {

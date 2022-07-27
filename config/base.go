@@ -2,8 +2,8 @@ package config
 
 import (
 	"time"
+	"ycore/driver/load/file/yamlloader"
 	"ycore/module/mylog"
-	"ycore/module/myyaml"
 )
 
 var EnvInfo *Env
@@ -54,7 +54,7 @@ type Nats struct {
 }
 
 func Init(path string) error {
-	if err := myyaml.Load(path, &EnvInfo); err != nil {
+	if err := yamlloader.LoadYaml(path, &EnvInfo); err != nil {
 		mylog.Errorf("[Config][Init] load Error err: %v", err)
 		return err
 	}

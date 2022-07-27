@@ -3,7 +3,7 @@ package goanalysis
 import (
 	"os"
 	"strings"
-	"ycore/load/project/goloader"
+	"ycore/driver/load/project/goloader"
 	"ycore/util"
 )
 
