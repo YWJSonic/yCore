@@ -7,7 +7,7 @@ import (
 )
 
 type Manager struct {
-	driver redis.Cmdable
+	redis.Cmdable
 	ctx    context.Context
 	cancel context.CancelFunc
 }

@@ -11,7 +11,6 @@ func New(addr, password string, poolSize int) (*Manager, error) {
 
 	ctx, cancel := context.WithCancel(context.TODO())
 	obj := &Manager{
-		driver: nil,
 		ctx:    ctx,
 		cancel: cancel,
 	}
@@ -22,7 +21,7 @@ func New(addr, password string, poolSize int) (*Manager, error) {
 		return nil, err
 	}
 
-	obj.driver = driver
+	obj.Cmdable = driver
 	go redis.PingLoop(ctx, cancel, driver)
 
 	mylog.Infof("[Redis][New] Connect success, address: %v", addr)
