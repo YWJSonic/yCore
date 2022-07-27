@@ -3,7 +3,6 @@ package web591
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -12,6 +11,8 @@ import (
 	"time"
 	"ycore/module/mydb"
 	"ycore/module/myhtml"
+	"ycore/module/mylog"
+	"ycore/util"
 
 	"golang.org/x/net/html"
 )
@@ -27,7 +28,7 @@ func GetData() {
 	}
 
 	startTime := time.Now()
-	fmt.Println("[start] Time:", startTime)
+	mylog.Infof("[start] Time: %v", startTime)
 	myhtml.SetDefaultClient()
 
 	authData := login("pc")
@@ -76,7 +77,7 @@ func GetData() {
 			// 	time.Sleep(time.Second * time.Duration(rand.Int31n(3)+1))
 			// }
 
-			urlStr = fmt.Sprintf(ObjPage, roomId)
+			urlStr = util.Sprintf(ObjPage, roomId)
 			detailInfo := getDetail(authData, urlStr)
 			idx = strings.Index(detailInfo.Data.FavData.Layout, "衛")
 			if idx < 0 {
@@ -86,8 +87,8 @@ func GetData() {
 			if bscount < 2 {
 				continue
 			}
-			homeResList = append(homeResList, fmt.Sprintf(TargetPage, roomId))
-			fmt.Println("[newDetail] Time Spand:", time.Since(startTime), "ReqCount:", reqWebCount)
+			homeResList = append(homeResList, util.Sprintf(TargetPage, roomId))
+			mylog.Infof("[newDetail] Time Spand:%v ReqCount: %v", time.Since(startTime), reqWebCount)
 		}
 
 		// 防止過度攻擊
@@ -102,14 +103,14 @@ func GetData() {
 
 		// 沒有下一頁 or 到了指定查詢數量
 		max, _ := strconv.Atoi(strings.ReplaceAll(payload.Records, ",", ""))
-		fmt.Println("[nextPage]Now Count", count, "Max Count:", max)
+		mylog.Infof("[nextPage]Now Count: %v Max Count: %v", count, max)
 		if count >= max || count >= customMax {
 			break
 		}
 
-		urlStr = fmt.Sprintf(Webpagelast, count, payload.Records)
+		urlStr = util.Sprintf(Webpagelast, count, payload.Records)
 		payload = getList(authData.CsrfToken, urlStr)
-		fmt.Println("[getList] Time Spand:", time.Since(startTime), "ReqCount:", reqWebCount)
+		mylog.Infof("[getList] Time Spand: %v ReqCount: %v", time.Since(startTime), reqWebCount)
 	}
 
 	_ = dbManager.Insert(context.TODO(), "FilterHomeData", DBStruct{RoomList: homeResList})
@@ -135,7 +136,7 @@ func getList(csrfToken string, url string) *HomeList {
 	payload := &HomeList{}
 	err = json.Unmarshal(sitemap, payload)
 	if err != nil {
-		fmt.Println("[getList] Unmarshal err:", err)
+		mylog.Errorf("[getList] Unmarshal err: %v", err)
 	}
 
 	return payload
@@ -164,7 +165,7 @@ func getDetail(authData LoginData, url string) *HomeDetail {
 	payload := &HomeDetail{}
 	err = json.Unmarshal(sitemap, payload)
 	if err != nil {
-		fmt.Println("[getDetail] Unmarshal err:", err)
+		mylog.Errorf("[getDetail] Unmarshal err: %v", err)
 	}
 	return payload
 }

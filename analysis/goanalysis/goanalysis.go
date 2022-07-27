@@ -1,7 +1,6 @@
 package goanalysis
 
 import (
-	"fmt"
 	"os"
 	"strings"
 	"ycore/load/project/goloader"
@@ -66,7 +65,7 @@ func GoCodeAnalysis(codeLine []string) {
 
 	allPackageMap := map[string]*PackageInfo{}
 	var currentPackage *PackageInfo
-	var currentFunc *FuncInfo
+	// var currentFunc *FuncInfo
 	var funcBlockCount uint
 	for {
 		lineCount++
@@ -126,12 +125,10 @@ func GoCodeAnalysis(codeLine []string) {
 			splitStr := strings.Split(currentLine, " ")
 
 			if splitStr[0] == "package" { // 分析 package 命名
-				fmt.Println("fin Package ", splitStr[1])
 				packageInfo := NewPackageInfo(splitStr[1])
 				allPackageMap[packageInfo.Name] = packageInfo
 				currentPackage = packageInfo
 			} else if splitStr[0] == "import" { // 進入 import 區塊
-				fmt.Println("fin import ", splitStr[1])
 
 				if splitStr[1] == "(" {
 					importBlock = true
@@ -151,8 +148,7 @@ func GoCodeAnalysis(codeLine []string) {
 				// SplitFunc(currentLine)
 
 				//建立關聯
-				currentFunc = NewFuncInfo(splitStr[1])
-				fmt.Println("fin func ", currentFunc)
+				// currentFunc = NewFuncInfo(splitStr[1])
 
 			}
 		}

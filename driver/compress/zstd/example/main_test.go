@@ -2,11 +2,12 @@ package example
 
 import (
 	"context"
-	"fmt"
 	"log"
 	"sync"
 	"testing"
 	"ycore/driver/compress/zstd"
+	"ycore/module/mylog"
+	"ycore/util"
 )
 
 func Test_To(t *testing.T) {
@@ -18,14 +19,14 @@ func Test_To(t *testing.T) {
 
 		go func(i int) {
 
-			out := handle.Compress([]byte(fmt.Sprintf(dataStr, i)))
+			out := handle.Compress([]byte(util.Sprintf(dataStr, i)))
 
 			get, err := handle.Decompress(out)
 			if err != nil {
 				log.Fatalln(err)
 			}
 
-			fmt.Println(string(get))
+			mylog.Info(string(get))
 			wg.Done()
 		}(i)
 	}

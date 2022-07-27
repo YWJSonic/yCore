@@ -3,8 +3,8 @@ package myrss
 import (
 	"bytes"
 	"encoding/xml"
-	"fmt"
 	"ycore/datastruct/myqueue"
+	"ycore/module/mylog"
 )
 
 type NodeType uint8
@@ -92,7 +92,7 @@ func Format(pageData []byte) (*RssInfo, error) {
 			}
 
 		default:
-			fmt.Print(se)
+			mylog.Info(se)
 		}
 	}
 

@@ -1,9 +1,9 @@
 package websocket
 
 import (
-	"fmt"
 	"ycore/constant"
 	"ycore/driver/connect/websocket/socketclient"
+	"ycore/module/mylog"
 )
 
 // 通知 Websocket Manager 有連線被中斷
@@ -33,7 +33,7 @@ func (self *WebsocketManager) GetBalanceClient() socketclient.IHandle {
 	var weight int64 = int64(constant.MaxInt)
 	var client *socketclient.Handler
 	self.clientMap.Range(func(key string, value interface{}) bool {
-		fmt.Printf("[Websocket][GetBalanceClient] token: %v, weight: %v", value.(*socketclient.Handler).GetToken(), value.(*socketclient.Handler).GetWeight())
+		mylog.Infof("[Websocket][GetBalanceClient] token: %v, weight: %v", value.(*socketclient.Handler).GetToken(), value.(*socketclient.Handler).GetWeight())
 		if value.(*socketclient.Handler).GetWeight() < weight {
 			weight = value.(*socketclient.Handler).GetWeight()
 			client = value.(*socketclient.Handler)

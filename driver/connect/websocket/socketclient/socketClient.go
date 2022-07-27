@@ -3,8 +3,8 @@ package socketclient
 import (
 	"context"
 	"errors"
-	"fmt"
 	"io"
+	"ycore/module/mylog"
 
 	"go.uber.org/atomic"
 	"nhooyr.io/websocket"
@@ -62,7 +62,7 @@ func New(ctx context.Context, conn *websocket.Conn, callBack SocketManagerCallBa
 func (self *Handler) Listen() {
 	// go self.write(ctx) // 有提供併發寫入不需要單一執行續處理
 	self.listenHandle()
-	fmt.Printf("[SocketClient][%v] close done.", self.token)
+	mylog.Infof("[SocketClient][%v] close done.", self.token)
 }
 
 // Websocket Client 識別編號
@@ -101,13 +101,13 @@ func (self *Handler) read(ctx context.Context) {
 			// server 斷線，先關閉 read()，由pingLoop()發動重新連線
 			if err != nil {
 				if websocket.CloseStatus(err) == websocket.StatusNormalClosure {
-					fmt.Printf("[SocketClient][%v] GS Disconnect: %v", self.token, err)
+					mylog.Errorf("[SocketClient][%v] GS Disconnect: %v", self.token, err)
 
 				} else if errors.Is(err, io.EOF) {
-					fmt.Printf("[SocketClient][%v] GS Disconnect: %v", self.token, err)
+					mylog.Errorf("[SocketClient][%v] GS Disconnect: %v", self.token, err)
 
 				} else {
-					fmt.Printf("[SocketClient][%v] read error: %v", self.token, err)
+					mylog.Errorf("[SocketClient][%v] read error: %v", self.token, err)
 
 				}
 				self.close(websocket.StatusInternalError, "read err")

@@ -2,7 +2,8 @@ package socketclient
 
 import (
 	"context"
-	"fmt"
+	"errors"
+	"ycore/util"
 
 	"nhooyr.io/websocket"
 )
@@ -14,9 +15,9 @@ import (
 // @return error			結果回傳
 func (self *Handler) Send(ctx context.Context, message []byte) error {
 	if self == nil {
-		return fmt.Errorf("socket Handler error token")
+		return errors.New("socket Handler error token")
 	} else if self.conn == nil {
-		return fmt.Errorf("socket disconnect token: %v", self.token)
+		return errors.New(util.Sprintf("socket disconnect token: %v", self.token))
 	}
 	err := self.conn.Write(ctx, websocket.MessageBinary, message)
 	return err

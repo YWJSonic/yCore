@@ -2,7 +2,6 @@ package websocket
 
 import (
 	"context"
-	"fmt"
 	"log"
 	"net"
 	"net/http"
@@ -12,6 +11,7 @@ import (
 	"ycore/dao"
 	"ycore/driver/connect/websocket/socketclient"
 	"ycore/driver/connect/websocket/socketserver"
+	"ycore/module/mylog"
 )
 
 type ApiCallBack interface {
@@ -55,7 +55,7 @@ func (self *WebsocketManager) Launch(addr string) {
 		WriteTimeout: time.Second * 10,
 	}
 	errc := make(chan error, 1)
-	fmt.Printf("[Websocket][Server] at %v", addr)
+	mylog.Infof("[Websocket][Server] at %v", addr)
 	go func() {
 		errc <- s.Serve(l)
 	}()
@@ -64,9 +64,9 @@ func (self *WebsocketManager) Launch(addr string) {
 	signal.Notify(sigs, os.Interrupt)
 	select {
 	case err := <-errc:
-		fmt.Printf("[Websocket][Server] failed to launch serve: %v", err)
+		mylog.Errorf("[Websocket][Server] failed to launch serve: %v", err)
 	case f := <-sigs:
-		fmt.Printf("[Websocket][Server] server be terminating: %v", f)
+		mylog.Errorf("[Websocket][Server] server be terminating: %v", f)
 	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)

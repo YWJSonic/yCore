@@ -1,9 +1,9 @@
 package socketserver
 
 import (
-	"fmt"
 	"net/http"
 	"ycore/driver/connect/websocket/socketclient"
+	"ycore/module/mylog"
 
 	"nhooyr.io/websocket"
 )
@@ -28,7 +28,7 @@ func (self *Handle) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	c, err := websocket.Accept(w, r, nil)
 	if err != nil {
-		fmt.Printf("[Websocket][ServeHTTP] %v", err)
+		mylog.Errorf("[Websocket][ServeHTTP] %v", err)
 		return
 	}
 

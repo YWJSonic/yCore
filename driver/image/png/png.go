@@ -2,9 +2,9 @@ package png
 
 import (
 	"bytes"
-	"fmt"
 	"image/png"
 	"os"
+	"ycore/util"
 )
 
 // 將 memory 資料存到本機 png
@@ -14,7 +14,7 @@ func NewImage(data []byte, filePath, fileName string) {
 		panic(err)
 	}
 
-	f, err := os.Create(fmt.Sprintf("%s/%s.png", filePath, fileName))
+	f, err := os.Create(util.Sprintf("%s/%s.png", filePath, fileName))
 	if err != nil {
 		panic(err)
 	}

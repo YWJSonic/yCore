@@ -2,12 +2,13 @@ package example
 
 import (
 	"context"
-	"fmt"
 	"log"
 	"testing"
 	"time"
 	igrpc "ycore/driver/connect/grpc"
+	"ycore/module/mylog"
 	echo "ycore/proto"
+	"ycore/util"
 
 	"google.golang.org/grpc"
 )
@@ -33,8 +34,8 @@ func GoGrpcServer() {
 type Echo struct{}
 
 func (self *Echo) Echo(ctx context.Context, in *echo.EchoRequest) (*echo.EchoReply, error) {
-	ec := fmt.Sprint(time.Now())
-	fmt.Println(ec)
+	ec := util.Sprint(time.Now())
+	mylog.Info(ec)
 	return &echo.EchoReply{Message: ec}, nil
 }
 

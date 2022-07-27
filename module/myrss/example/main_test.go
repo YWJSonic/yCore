@@ -1,16 +1,16 @@
 package example
 
 import (
-	"fmt"
 	"testing"
 	"ycore/module/myhtml"
+	"ycore/module/mylog"
 	"ycore/module/myrss"
 )
 
 func TestRss(t *testing.T) {
 	_, doc, err := myhtml.GetWebPackage("https://gnn.gamer.com.tw/rss.xml")
 	if err != nil {
-		fmt.Println(err)
+		mylog.Error(err)
 		return
 	}
 
@@ -29,10 +29,9 @@ func print(count int, nodes []*myrss.NodeInfo) []*myrss.NodeInfo {
 	}
 	for _, node := range nodes {
 		if node.Name == "title" {
-			fmt.Printf("%s<%s>%s\n", tab, node.Name, node.Value)
+			mylog.Infof("%s<%s>%s\n", tab, node.Name, node.Value)
 		}
 		print(count+1, node.IncludeNode)
-		// fmt.Printf("</%s>\n", node.Name)
 	}
 
 	return nodes

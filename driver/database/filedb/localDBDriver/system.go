@@ -3,16 +3,16 @@ package localDBDriver
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 	"io/ioutil"
 	"os"
 	"strconv"
 	"strings"
 	"ycore/driver/database/filedb/constant"
+	"ycore/util"
 )
 
 func (self *Driver) NewCollection(collection string) error {
-	path := fmt.Sprintf("%v%v", self.path, collection)
+	path := util.Sprintf("%v%v", self.path, collection)
 	_, err := os.Open(path)
 	if !os.IsNotExist(err) {
 		return errors.New("Collection Already Exist")
@@ -32,7 +32,7 @@ func (self *Driver) NewCollection(collection string) error {
 }
 
 func (self *Driver) Set(collection string, key string, data interface{}) (interface{}, error) {
-	path := fmt.Sprintf("%v/%v/%v", self.path, collection, key)
+	path := util.Sprintf("%v/%v/%v", self.path, collection, key)
 	result := &insertResult{}
 	byteData, err := json.Marshal(data)
 	if err != nil {
@@ -47,7 +47,7 @@ func (self *Driver) Set(collection string, key string, data interface{}) (interf
 
 		head.Incr++
 		key = strconv.FormatInt(head.Incr, 10)
-		path = fmt.Sprintf("%v%v/%v", self.path, collection, key)
+		path = util.Sprintf("%v%v/%v", self.path, collection, key)
 		_ = self.setHead(collection, head)
 	}
 
@@ -63,7 +63,7 @@ func (self *Driver) Set(collection string, key string, data interface{}) (interf
 func (self *Driver) GetLike(collection, key string) (map[string]interface{}, error) {
 	datas := make(map[string]interface{})
 
-	path := fmt.Sprintf("%v/%v", self.path, collection)
+	path := util.Sprintf("%v/%v", self.path, collection)
 	fileInfos, err := ioutil.ReadDir(path)
 	if err != nil {
 		return nil, errors.New(constant.NoData)
@@ -71,7 +71,7 @@ func (self *Driver) GetLike(collection, key string) (map[string]interface{}, err
 
 	for _, fileInfo := range fileInfos {
 		if ok := strings.Index(fileInfo.Name(), key); ok >= 0 {
-			file, err := os.Open(fmt.Sprintf("%v/%v", path, fileInfo.Name()))
+			file, err := os.Open(util.Sprintf("%v/%v", path, fileInfo.Name()))
 			if err != nil {
 				return nil, err
 			}
@@ -96,7 +96,7 @@ func (self *Driver) GetLike(collection, key string) (map[string]interface{}, err
 func (self *Driver) Get(collection, key string) (interface{}, error) {
 	var data interface{}
 
-	path := fmt.Sprintf("%v%v/%v", self.path, collection, key)
+	path := util.Sprintf("%v%v/%v", self.path, collection, key)
 	file, err := os.Open(path)
 	if err != nil {
 		return nil, err
@@ -122,7 +122,7 @@ func (self *Driver) setHead(collection string, head *fileHead) error {
 		return err
 	}
 
-	path := fmt.Sprintf("%v%v/%v", self.path, collection, "head")
+	path := util.Sprintf("%v%v/%v", self.path, collection, "head")
 	file, err := os.OpenFile(path, os.O_CREATE, 0666)
 	if err != nil {
 		return err
@@ -139,7 +139,7 @@ func (self *Driver) setHead(collection string, head *fileHead) error {
 
 func (self *Driver) getHead(collection string) (*fileHead, error) {
 
-	path := fmt.Sprintf("%v%v/%v", self.path, collection, "head")
+	path := util.Sprintf("%v%v/%v", self.path, collection, "head")
 	file, err := os.Open(path)
 	if err != nil {
 		return nil, err

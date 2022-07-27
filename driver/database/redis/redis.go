@@ -3,10 +3,10 @@ package redis
 import (
 	"context"
 	"errors"
-	"fmt"
 	"net/url"
 	"strings"
 	"time"
+	"ycore/module/mylog"
 
 	"github.com/go-redis/redis/v8"
 )
@@ -22,13 +22,13 @@ func New(addr, password string, poolSize int) (*Manager, error) {
 
 	redisClient, err := obj.init(addr, password, poolSize, ctx, cancel)
 	if err != nil {
-		fmt.Printf("[Redis][New] Init error: %v", err)
+		mylog.Errorf("[Redis][New] Init error: %v", err)
 		return nil, err
 	}
 
 	obj.redisClient = redisClient
 
-	fmt.Printf("[Redis][New] Connect success, address: %v", addr)
+	mylog.Infof("[Redis][New] Connect success, address: %v", addr)
 	return obj, nil
 }
 
@@ -43,7 +43,7 @@ func (mgr *Manager) init(addr, password string, poolSize int, ctx context.Contex
 	for _, ip := range redisIPs {
 		_, err := url.Parse("http://" + ip)
 		if err != nil {
-			fmt.Printf("[Redis][init] URL parse error: %v", err)
+			mylog.Errorf("[Redis][init] URL parse error: %v", err)
 			<-ctx.Done()
 			cancel()
 			return nil, err
@@ -52,7 +52,7 @@ func (mgr *Manager) init(addr, password string, poolSize int, ctx context.Contex
 
 	client, err := mgr.connection(redisIPs, password, poolSize)
 	if err != nil {
-		fmt.Printf("[Redis][init] connection error, err: %v", err)
+		mylog.Errorf("[Redis][init] connection error, err: %v", err)
 		return nil, err
 	}
 
@@ -97,7 +97,7 @@ func pingLoop(ctx context.Context, redisClient redis.Cmdable, cancel context.Can
 		select {
 		case <-ticker.C:
 			if _, err := redisClient.Ping(ctx).Result(); err != nil {
-				fmt.Printf("[Redis][pingLoop] ping error, err: %v", err.Error())
+				mylog.Errorf("[Redis][pingLoop] ping error, err: %v", err.Error())
 				return
 			}
 		case <-ctx.Done():

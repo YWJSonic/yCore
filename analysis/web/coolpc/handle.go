@@ -2,7 +2,6 @@ package coolpc
 
 import (
 	"context"
-	"fmt"
 	"log"
 	"net/http"
 	"strconv"
@@ -10,6 +9,7 @@ import (
 	"sync"
 	"ycore/module/mydb"
 	"ycore/module/myhtml"
+	"ycore/module/mylog"
 	"ycore/types"
 	"ycore/util"
 
@@ -49,7 +49,7 @@ func GetWeb() {
 		filter.FiltAttrs = append(filter.FiltAttrs,
 			html.Attribute{
 				Key: "name",
-				Val: fmt.Sprintf("n%d", i),
+				Val: util.Sprintf("n%d", i),
 			})
 		filter.Operation = append(filter.Operation, myhtml.FilterOperation_GetSubToken, myhtml.FilterOperation_GetSubcContent)
 		filters["select"] = append(filters["select"], filter)
@@ -76,7 +76,7 @@ func GetWeb() {
 	for idx, filter := range filters["select"] {
 		idx++
 		go func(idx int, filter *myhtml.FilterObj) {
-			key := fmt.Sprintf("c%d", idx)
+			key := util.Sprintf("c%d", idx)
 			typeName := typeMap[idx]
 			data := dataMap[key].([]int)
 			for subidx, token := range filter.SubRes {
@@ -97,7 +97,7 @@ func GetWeb() {
 											TypeName:   typeName,
 											TypeId:     idx,
 											Price:      data[v],
-											PriceTag:   nameSplite[1],
+											PriceTag:   nameSplite[len(nameSplite)-1],
 											Name:       nameSplite[0],
 											OriginName: filter.SubContent[subidx],
 										})
@@ -151,7 +151,7 @@ func updatedata(coolpcDB *coolpcDbManager, data *CacheStruct) {
 		data.Name = nameSplite[0]
 		err := coolpcDB.Update(context.TODO(), "Coolpc", data.Key, data)
 		if err != nil {
-			fmt.Println(err)
+			mylog.Error(err)
 		}
 	}
 }
