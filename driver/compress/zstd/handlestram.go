@@ -6,7 +6,7 @@ import (
 	"github.com/klauspost/compress/zstd"
 )
 
-// ------------------ 串流解碼 關閉前使用同一份字典 ------------------
+// ------------------ 串流解碼 與單次的區別？------------------
 
 type Handle struct {
 	encoder *zstd.Encoder
@@ -14,10 +14,17 @@ type Handle struct {
 	ctx     context.Context
 }
 
-func NewStramHandle(ctx context.Context) *Handle {
+func NewStramHandle(ctx context.Context) (*Handle, error) {
 
-	var encoder, _ = zstd.NewWriter(nil, zstd.WithWindowSize(WithWindowSize))
-	var decoder, _ = zstd.NewReader(nil, zstd.WithDecoderMaxWindow(WithDecoderMaxWindowSize), zstd.WithDecoderMaxMemory(WithDecoderMaxMemorySize))
+	encoder, err := zstd.NewWriter(nil, zstd.WithWindowSize(WithWindowSize))
+	if err != nil {
+		return nil, err
+	}
+
+	decoder, err1 := zstd.NewReader(nil, zstd.WithDecoderMaxWindow(WithDecoderMaxWindowSize), zstd.WithDecoderMaxMemory(WithDecoderMaxMemorySize))
+	if err1 != nil {
+		return nil, err1
+	}
 
 	hanle := &Handle{
 		encoder: encoder,
@@ -25,7 +32,7 @@ func NewStramHandle(ctx context.Context) *Handle {
 		ctx:     ctx,
 	}
 	go hanle.listen()
-	return hanle
+	return hanle, nil
 }
 
 func (self *Handle) Compress(src []byte) []byte {

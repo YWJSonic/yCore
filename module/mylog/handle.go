@@ -32,6 +32,16 @@ func Infof(format string, a ...interface{}) {
 	println(logFormat)
 }
 
+// func SprintInfof(format string, a ...interface{}) string {
+// 	logFormat := logFormat{
+// 		Level:   Level_Info_str,
+// 		Time:    time.Now().Format(time.RFC3339),
+// 		Message: util.Sprintf(format, a...),
+// 	}
+// 	js, _ := util.Marshal(logFormat)
+// 	return util.Sprint(string(js))
+// }
+
 func Error(format interface{}) {
 	logFormat := logFormat{
 		Level:   Level_Error_str,

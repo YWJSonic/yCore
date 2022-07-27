@@ -12,7 +12,7 @@ import (
 
 func Test_To(t *testing.T) {
 	var dataStr = `{"1":"%v"}`
-	handle := zstd.NewStramHandle(context.TODO())
+	handle, _ := zstd.NewStramHandle(context.TODO())
 	wg := sync.WaitGroup{}
 	wg.Add(20)
 	for i := 0; i < 20; i++ {
