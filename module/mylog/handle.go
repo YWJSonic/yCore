@@ -7,6 +7,10 @@ import (
 )
 
 func Info(format interface{}) {
+	if Level < Level_Info {
+		return
+	}
+
 	logFormat := logFormat{
 		Level:   Level_Info_str,
 		Time:    time.Now().Format(time.RFC3339),
@@ -16,6 +20,10 @@ func Info(format interface{}) {
 }
 
 func Infof(format string, a ...interface{}) {
+	if Level < Level_Info {
+		return
+	}
+
 	logFormat := logFormat{
 		Level:   Level_Info_str,
 		Time:    time.Now().Format(time.RFC3339),
