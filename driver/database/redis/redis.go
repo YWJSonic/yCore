@@ -11,60 +11,31 @@ import (
 	"github.com/go-redis/redis/v8"
 )
 
-// New redis manager
-func New(addr, password string, poolSize int) (*Manager, error) {
-
-	ctx, cancel := context.WithCancel(context.TODO())
-	obj := &Manager{
-		redisClient: nil,
-		ctx:         ctx,
-	}
-
-	redisClient, err := obj.init(addr, password, poolSize, ctx, cancel)
-	if err != nil {
-		mylog.Errorf("[Redis][New] Init error: %v", err)
-		return nil, err
-	}
-
-	obj.redisClient = redisClient
-
-	mylog.Infof("[Redis][New] Connect success, address: %v", addr)
-	return obj, nil
-}
-
-type Manager struct {
-	redisClient redis.Cmdable
-	ctx         context.Context
-	// mu          sync.RWMutex
-}
-
-func (mgr *Manager) init(addr, password string, poolSize int, ctx context.Context, cancel context.CancelFunc) (redis.Cmdable, error) {
+func New(addr, password string, poolSize int) (redis.Cmdable, error) {
 	redisIPs := strings.Split(addr, ",")
 	for _, ip := range redisIPs {
 		_, err := url.Parse("http://" + ip)
 		if err != nil {
-			mylog.Errorf("[Redis][init] URL parse error: %v", err)
-			<-ctx.Done()
-			cancel()
+			mylog.Errorf("[Redis][New] url Parse error: %v", err)
 			return nil, err
 		}
 	}
 
-	client, err := mgr.connection(redisIPs, password, poolSize)
+	driver, err := connection(redisIPs, password, poolSize)
 	if err != nil {
-		mylog.Errorf("[Redis][init] connection error, err: %v", err)
+		mylog.Errorf("[RedisDriver][New] connection error: %v", err)
 		return nil, err
 	}
 
-	go pingLoop(ctx, client, cancel)
-
-	return client, nil
+	mylog.Infof("[RedisDriver][New] Connect success, address: %v", addr)
+	return driver, nil
 }
 
-func (mgr *Manager) connection(redisIPs []string, password string, poolSize int) (redis.Cmdable, error) {
+func connection(redisIPs []string, password string, poolSize int) (redis.Cmdable, error) {
 	switch len(redisIPs) {
 	case 0: // error
-		return nil, errors.New("[Redis][connection] IP address null")
+		return nil, errors.New("[RedisDriver][connection] IP address null")
+
 	case 1: // single
 		redisClient := redis.NewClient(&redis.Options{
 			Addr:       redisIPs[0],
@@ -72,9 +43,8 @@ func (mgr *Manager) connection(redisIPs []string, password string, poolSize int)
 			PoolSize:   poolSize,
 			MaxConnAge: 1 * time.Hour,
 		})
-		// redisClient.AddHook(apmgoredis.NewHook())
-
 		return redisClient, nil
+
 	default: // cluster
 		redisClient := redis.NewClusterClient(&redis.ClusterOptions{
 			Addrs:      redisIPs,
@@ -82,27 +52,25 @@ func (mgr *Manager) connection(redisIPs []string, password string, poolSize int)
 			PoolSize:   poolSize,
 			MaxConnAge: 1 * time.Hour,
 		})
-		// redisClient.AddHook(apmgoredis.NewHook())
-
 		return redisClient, nil
 
 	}
 }
 
-func pingLoop(ctx context.Context, redisClient redis.Cmdable, cancel context.CancelFunc) {
+func PingLoop(ctx context.Context, cancel context.CancelFunc, redisClient redis.Cmdable) {
 	ticker := time.NewTicker(5 * time.Second)
 	defer ticker.Stop()
-
 	for {
 		select {
+		case <-ctx.Done():
+			return
+
 		case <-ticker.C:
 			if _, err := redisClient.Ping(ctx).Result(); err != nil {
+				cancel()
 				mylog.Errorf("[Redis][pingLoop] ping error, err: %v", err.Error())
 				return
 			}
-		case <-ctx.Done():
-			cancel()
-			return
 		}
 	}
 }
