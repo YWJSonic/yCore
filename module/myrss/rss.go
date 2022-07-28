@@ -3,7 +3,7 @@ package myrss
 import (
 	"bytes"
 	"encoding/xml"
-	"ycore/datastruct/myqueue"
+	"ycore/dao/queue"
 	"ycore/module/mylog"
 )
 
@@ -30,7 +30,7 @@ func Format(pageData []byte) (*RssInfo, error) {
 	decoder := xml.NewDecoder(bytes.NewBuffer(pageData))
 	var priveNode *NodeInfo
 	var currentNode *NodeInfo
-	qu := myqueue.Queue{}
+	qu := queue.Queue{}
 	for {
 		// Read tokens from the XML document in a stream.
 		t, _ := decoder.Token()

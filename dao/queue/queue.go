@@ -1,4 +1,4 @@
-package myqueue
+package queue
 
 type Queue struct {
 	value []interface{}
