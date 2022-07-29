@@ -1,6 +1,8 @@
 package web591
 
 type DBStruct struct {
+	Time     string   `json:"time"`
+	Date     string   `json:"date"`
 	RoomList []string `json:"roomList"`
 }
 

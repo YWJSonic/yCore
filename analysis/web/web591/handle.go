@@ -33,7 +33,7 @@ func GetData() {
 
 	authData := login("pc")
 
-	urlStr := Webpage
+	urlStr := webpage
 	payload := getList(authData.CsrfToken, urlStr)
 
 	// lastReqTime := time.Now()
@@ -77,7 +77,7 @@ func GetData() {
 			// 	time.Sleep(time.Second * time.Duration(rand.Int31n(3)+1))
 			// }
 
-			urlStr = util.Sprintf(ObjPage, roomId)
+			urlStr = util.Sprintf(objPage, roomId)
 			detailInfo := getDetail(authData, urlStr)
 			idx = strings.Index(detailInfo.Data.FavData.Layout, "衛")
 			if idx < 0 {
@@ -87,7 +87,7 @@ func GetData() {
 			if bscount < 2 {
 				continue
 			}
-			homeResList = append(homeResList, util.Sprintf(TargetPage, roomId))
+			homeResList = append(homeResList, util.Sprintf(targetPage, roomId))
 			mylog.Infof("[newDetail] Time Spand:%v ReqCount: %v", time.Since(startTime), reqWebCount)
 		}
 
@@ -108,12 +108,21 @@ func GetData() {
 			break
 		}
 
-		urlStr = util.Sprintf(Webpagelast, count, payload.Records)
+		urlStr = util.Sprintf(webpagelast, count, payload.Records)
 		payload = getList(authData.CsrfToken, urlStr)
 		mylog.Infof("[getList] Time Spand: %v ReqCount: %v", time.Since(startTime), reqWebCount)
 	}
 
-	_ = dbManager.Insert(context.TODO(), "FilterHomeData", DBStruct{RoomList: homeResList})
+	time.Now().Format(time.RFC1123)
+	_ = dbManager.Insert(
+		context.TODO(),
+		"FilterHomeData",
+		DBStruct{
+			Time:     util.ServerTimeNow().Format("15:04:05 -07:00"),
+			Date:     util.ServerTimeNow().Format("2006-01-02"),
+			RoomList: homeResList,
+		},
+	)
 }
 
 func getList(csrfToken string, url string) *HomeList {
@@ -174,7 +183,7 @@ func login(device string) LoginData {
 	data := LoginData{
 		Device: device,
 	}
-	req, _ := http.NewRequest("GET", LoginPage, nil)
+	req, _ := http.NewRequest("GET", loginPage, nil)
 	res, err := http.DefaultClient.Do(req)
 	if err != nil {
 		log.Fatal(err)
