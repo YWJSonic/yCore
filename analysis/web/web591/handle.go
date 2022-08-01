@@ -9,11 +9,13 @@ import (
 	"strconv"
 	"strings"
 	"time"
+	"ycore/driver/protocol/rssfeed"
 	"ycore/module/mydb"
 	"ycore/module/myhtml"
 	"ycore/module/mylog"
 	"ycore/util"
 
+	"github.com/gorilla/feeds"
 	"golang.org/x/net/html"
 )
 
@@ -39,6 +41,7 @@ func GetData() {
 	// lastReqTime := time.Now()
 	homeViewMap := map[int64]struct{}{}
 	homeResList := []string{}
+	rssData := []*feeds.Item{}
 	count := 0
 	idx := 0
 	customMax := 60 // 指定查尋數量
@@ -87,7 +90,18 @@ func GetData() {
 			if bscount < 2 {
 				continue
 			}
-			homeResList = append(homeResList, util.Sprintf(targetPage, roomId))
+
+			js, _ := util.Marshal(detailInfo.Data)
+
+			pageurl := util.Sprintf(targetPage, roomId)
+			homeResList = append(homeResList, pageurl)
+			rssData = append(rssData, &feeds.Item{
+				Title: detailInfo.Data.Title,
+				Link: &feeds.Link{
+					Href: pageurl,
+				},
+				Description: string(js),
+			})
 			mylog.Infof("[newDetail] Time Spand:%v ReqCount: %v", time.Since(startTime), reqWebCount)
 		}
 
@@ -112,6 +126,8 @@ func GetData() {
 		payload = getList(authData.CsrfToken, urlStr)
 		mylog.Infof("[getList] Time Spand: %v ReqCount: %v", time.Since(startTime), reqWebCount)
 	}
+
+	rssfeed.NewFeed(rssData)
 
 	time.Now().Format(time.RFC1123)
 	_ = dbManager.Insert(

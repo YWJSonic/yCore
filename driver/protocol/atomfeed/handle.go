@@ -1,0 +1,5 @@
+package atomfeed
+
+func New() {
+
+}
