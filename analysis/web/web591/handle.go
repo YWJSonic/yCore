@@ -9,7 +9,7 @@ import (
 	"strconv"
 	"strings"
 	"time"
-	"ycore/driver/protocol/rssfeed"
+	"ycore/driver/protocol/rss/rssfeed"
 	"ycore/module/mydb"
 	"ycore/module/myhtml"
 	"ycore/module/mylog"
@@ -24,7 +24,7 @@ var reqWebCount = 0
 
 func GetData() {
 
-	dbManager, err := mydb.NewArangoDB("http://10.146.0.2:8529", "", "", "WebData")
+	dbManager, err := mydb.NewArangoDB("http://10.140.0.2:8529", "", "", "WebData")
 	if err != nil {
 		return
 	}

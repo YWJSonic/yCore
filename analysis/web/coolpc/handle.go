@@ -19,7 +19,7 @@ import (
 func GetWeb() {
 
 	coolpcDB := coolpcDbManager{}
-	dbManager, err := mydb.NewArangoDB("http://10.146.0.2:8529", "", "", "WebData")
+	dbManager, err := mydb.NewArangoDB("http://10.140.0.2:8529", "", "", "WebData")
 	if err != nil {
 		return
 	}

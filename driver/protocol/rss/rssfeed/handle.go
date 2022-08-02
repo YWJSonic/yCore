@@ -17,7 +17,7 @@ import (
 func NewFeed(feedsDatas []*feeds.Item) {
 	feed := &feeds.Feed{
 		Title: "591 最新兩房資訊",
-		Link:  &feeds.Link{Href: "http://34.146.44.103:8080/rss.xml"},
+		Link:  &feeds.Link{Href: "http://34.81.111.226:8080/rss.xml"},
 		// Description: "Description of your feeds",
 		// Author:  &feeds.Author{Name: "author name"},
 		Created: time.Now(),
@@ -37,6 +37,7 @@ func NewFeed(feedsDatas []*feeds.Item) {
 	feed.Items = feedItems
 
 	rssFeed := (&feeds.Rss{Feed: feed}).RssFeed()
+	mylog.Info("writefile.ProtocolXml")
 	err := writefile.ProtocolXml(`/home/bunkeryangtw/nginxhome/rss.xml`, rssFeed.FeedXml(), os.ModePerm)
 	if err != nil {
 		mylog.Errorf("[Rss] err: %v", err)
