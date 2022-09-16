@@ -1,6 +1,11 @@
 package mydb
 
-import "ycore/driver/database/nosql/arango"
+import (
+	"errors"
+	"ycore/driver/database/nosql/arango"
+)
+
+var NoDataError = errors.New("data not find")
 
 func NewArangoDB(addr, username, password, database string) (*Manager, error) {
 	obj := &Manager{}

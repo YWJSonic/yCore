@@ -7,15 +7,9 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func New() {
-
+func New() *restful.RestfulDriver {
 	router := restful.New()
-	Router(router)
-	router.Run(":80")
-}
-
-func Router(router *restful.RestfulDriver) {
-	// router.Handle("/SignUp/", SingUp)
+	return router
 }
 
 func respontHtml(c *gin.Context, name, payload string) {
