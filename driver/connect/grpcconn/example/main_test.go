@@ -5,7 +5,8 @@ import (
 	"log"
 	"testing"
 	"time"
-	igrpc "ycore/driver/connect/grpc"
+
+	"ycore/driver/connect/grpcconn"
 	"ycore/module/mylog"
 	echo "ycore/proto"
 	"ycore/util"
@@ -28,7 +29,7 @@ func GoGrpcServer() {
 		return nil
 	}
 
-	_ = igrpc.NewGRPCServer(port, newGrpcServerFun)
+	_ = grpcconn.NewGRPCServer(port, newGrpcServerFun)
 }
 
 type Echo struct{}
@@ -46,7 +47,7 @@ func GoGrpcClient() {
 		ecc = echo.NewEchoEventClient(grpcClient)
 		return nil
 	}
-	_ = igrpc.NewGRPCClient(port, newGrpcClientFun)
+	_ = grpcconn.NewGRPCClient(port, newGrpcClientFun)
 
 	r, err := ecc.Echo(context.Background(), &echo.EchoRequest{Message: "123"})
 	if err != nil {

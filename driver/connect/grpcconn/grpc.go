@@ -1,4 +1,4 @@
-package igrpc
+package grpcconn
 
 import (
 	"net"
@@ -38,5 +38,4 @@ func NewGRPCClient(adderss string, newGrpcFun CreateGrpcClientFun) error {
 		return err
 	}
 	return nil
-
 }
