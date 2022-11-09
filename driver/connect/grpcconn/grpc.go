@@ -4,6 +4,7 @@ import (
 	"net"
 
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 )
 
 type CreateGrpcServerFun func(grpcServer *grpc.Server) error
@@ -19,23 +20,16 @@ func NewGRPCServer(address string, newGrpcFun CreateGrpcServerFun, opt ...grpc.S
 		return err
 	}
 
-	if err := s.Serve(lis); err != nil {
-		return err
-	}
-
-	return nil
+	return s.Serve(lis)
 }
 
 type CreateGrpcClientFun func(grpcClient *grpc.ClientConn) error
 
 func NewGRPCClient(adderss string, newGrpcFun CreateGrpcClientFun) error {
-	conn, err := grpc.Dial(adderss, grpc.WithInsecure())
+	conn, err := grpc.Dial(adderss, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		return err
 	}
 
-	if err := newGrpcFun(conn); err != nil {
-		return err
-	}
-	return nil
+	return newGrpcFun(conn)
 }

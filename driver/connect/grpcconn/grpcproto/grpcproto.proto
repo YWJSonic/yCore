@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+service GrpcApi {
+  rpc RpcRequest(Req) returns (Res) {}
+}
+
+message Req {
+    bytes payload = 1;
+}
+message Res {
+  bytes payload = 1;
+}
