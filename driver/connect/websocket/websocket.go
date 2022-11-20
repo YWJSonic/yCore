@@ -2,7 +2,7 @@ package websocket
 
 import (
 	"context"
-	"log"
+	"fmt"
 	"net"
 	"net/http"
 	"os"
@@ -15,6 +15,7 @@ import (
 )
 
 type ApiCallBack interface {
+	OnNewConnect(token string)
 	OnClose(token string)
 	ReceiveMessage(ctx context.Context, socketClient *socketclient.Handler, message []byte)
 }
@@ -35,15 +36,15 @@ func (self *WebsocketManager) ImportApiCallBack(apiCallBack ApiCallBack) {
 	self.apiCallBack = apiCallBack
 }
 
-func (self *WebsocketManager) Launch(addr string) {
+func (self *WebsocketManager) Launch(addr string) error {
 
 	if len(addr) == 0 {
-		log.Fatalf("[Websocket][Launch] addr Error addr: %v", addr)
+		return fmt.Errorf("[Websocket][Launch] addr Error addr: %v", addr)
 	}
 
 	l, err := net.Listen("tcp", addr)
 	if err != nil {
-		log.Fatalf("[Websocket][Launch] Listen Error addr: %v", addr)
+		return fmt.Errorf("[Websocket][Launch] Listen Error addr: %v", addr)
 	}
 
 	self.server = socketserver.New()
@@ -71,6 +72,5 @@ func (self *WebsocketManager) Launch(addr string) {
 
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
 	defer cancel()
-	err = s.Shutdown(ctx)
-	log.Fatalf(err.Error())
+	return s.Shutdown(ctx)
 }
