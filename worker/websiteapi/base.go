@@ -25,7 +25,7 @@ func New() {
 	// Restful
 	restfulRouter := myrestful.New()
 	Router(restfulRouter)
-	restfulRouter.Run(":80")
+	restfulRouter.Run(":8080")
 }
 
 func Router(router *restful.RestfulDriver) {
