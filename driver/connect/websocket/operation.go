@@ -1,9 +1,9 @@
 package websocket
 
 import (
-	"ycore/constant"
-	"ycore/driver/connect/websocket/socketclient"
-	"ycore/module/mylog"
+	"github.com/YWJSonic/ycore/constant"
+	"github.com/YWJSonic/ycore/driver/connect/websocket/socketclient"
+	"github.com/YWJSonic/ycore/module/mylog"
 )
 
 // 通知 Websocket Manager 有連線被中斷

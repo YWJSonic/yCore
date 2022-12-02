@@ -7,8 +7,9 @@ import (
 	"os"
 	"strconv"
 	"strings"
-	"ycore/driver/database/filedb/constant"
-	"ycore/util"
+
+	"github.com/YWJSonic/ycore/driver/database/filedb/constant"
+	"github.com/YWJSonic/ycore/util"
 )
 
 func (self *Driver) NewCollection(collection string) error {

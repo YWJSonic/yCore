@@ -2,7 +2,8 @@ package socketclient
 
 import (
 	"context"
-	"ycore/module/mylog"
+
+	"github.com/YWJSonic/ycore/module/mylog"
 
 	"go.uber.org/atomic"
 	"nhooyr.io/websocket"

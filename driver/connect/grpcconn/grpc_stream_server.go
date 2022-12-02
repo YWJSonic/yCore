@@ -7,7 +7,8 @@ import (
 	"net"
 	"sync"
 	"time"
-	"ycore/driver/connect/grpcconn/streamproto"
+
+	"github.com/YWJSonic/ycore/driver/connect/grpcconn/streamproto"
 
 	"github.com/rs/xid"
 	"google.golang.org/grpc"

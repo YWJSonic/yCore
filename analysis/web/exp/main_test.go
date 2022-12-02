@@ -2,7 +2,8 @@ package main
 
 import (
 	"testing"
-	"ycore/analysis/web/coolpc"
+
+	"github.com/YWJSonic/ycore/analysis/web/coolpc"
 )
 
 func Test_main(t *testing.T) {

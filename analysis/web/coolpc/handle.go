@@ -7,11 +7,12 @@ import (
 	"strconv"
 	"strings"
 	"sync"
-	"ycore/module/mydb"
-	"ycore/module/myhtml"
-	"ycore/module/mylog"
-	"ycore/types"
-	"ycore/util"
+
+	"github.com/YWJSonic/ycore/module/mydb"
+	"github.com/YWJSonic/ycore/module/myhtml"
+	"github.com/YWJSonic/ycore/module/mylog"
+	"github.com/YWJSonic/ycore/types"
+	"github.com/YWJSonic/ycore/util"
 
 	"golang.org/x/net/html"
 )

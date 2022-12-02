@@ -6,7 +6,8 @@ import (
 	"net/url"
 	"strings"
 	"time"
-	"ycore/module/mylog"
+
+	"github.com/YWJSonic/ycore/module/mylog"
 
 	"github.com/go-redis/redis/v8"
 )

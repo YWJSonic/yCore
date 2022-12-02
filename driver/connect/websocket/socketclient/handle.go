@@ -3,7 +3,8 @@ package socketclient
 import (
 	"context"
 	"errors"
-	"ycore/util"
+
+	"github.com/YWJSonic/ycore/util"
 
 	"nhooyr.io/websocket"
 )

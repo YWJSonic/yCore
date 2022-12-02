@@ -2,7 +2,8 @@ package main
 
 import (
 	"flag"
-	"ycore/worker/websiteapi"
+
+	"github.com/YWJSonic/ycore/worker/websiteapi"
 )
 
 var configPath = flag.String("config", "./env.yaml", "specific config to processing")

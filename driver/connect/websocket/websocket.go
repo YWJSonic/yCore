@@ -8,10 +8,11 @@ import (
 	"os"
 	"os/signal"
 	"time"
-	"ycore/dao"
-	"ycore/driver/connect/websocket/socketclient"
-	"ycore/driver/connect/websocket/socketserver"
-	"ycore/module/mylog"
+
+	"github.com/YWJSonic/ycore/dao"
+	"github.com/YWJSonic/ycore/driver/connect/websocket/socketclient"
+	"github.com/YWJSonic/ycore/driver/connect/websocket/socketserver"
+	"github.com/YWJSonic/ycore/module/mylog"
 )
 
 type ApiCallBack interface {

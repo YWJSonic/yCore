@@ -1,7 +1,7 @@
 package websocket
 
 import (
-	"ycore/driver/connect/websocket/socketclient"
+	"github.com/YWJSonic/ycore/driver/connect/websocket/socketclient"
 )
 
 // Websocker Server 有新連線

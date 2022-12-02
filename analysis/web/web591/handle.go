@@ -9,11 +9,12 @@ import (
 	"strconv"
 	"strings"
 	"time"
-	"ycore/driver/protocol/rss/rssfeed"
-	"ycore/module/mydb"
-	"ycore/module/myhtml"
-	"ycore/module/mylog"
-	"ycore/util"
+
+	"github.com/YWJSonic/ycore/driver/protocol/rss/rssfeed"
+	"github.com/YWJSonic/ycore/module/mydb"
+	"github.com/YWJSonic/ycore/module/myhtml"
+	"github.com/YWJSonic/ycore/module/mylog"
+	"github.com/YWJSonic/ycore/util"
 
 	"github.com/gorilla/feeds"
 	"golang.org/x/net/html"

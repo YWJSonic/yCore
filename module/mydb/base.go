@@ -2,7 +2,8 @@ package mydb
 
 import (
 	"errors"
-	"ycore/driver/database/nosql/arango"
+
+	"github.com/YWJSonic/ycore/driver/database/nosql/arango"
 )
 
 var NoDataError = errors.New("data not find")

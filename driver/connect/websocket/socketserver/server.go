@@ -2,8 +2,9 @@ package socketserver
 
 import (
 	"net/http"
-	"ycore/driver/connect/websocket/socketclient"
-	"ycore/module/mylog"
+
+	"github.com/YWJSonic/ycore/driver/connect/websocket/socketclient"
+	"github.com/YWJSonic/ycore/module/mylog"
 
 	"github.com/rs/xid"
 	"nhooyr.io/websocket"

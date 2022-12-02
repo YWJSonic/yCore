@@ -1,7 +1,7 @@
 package example
 
 import (
-	"ycore/driver/database/filedb/localDBDriver"
+	"github.com/YWJSonic/ycore/driver/database/filedb/localDBDriver"
 )
 
 type LocalDB struct {

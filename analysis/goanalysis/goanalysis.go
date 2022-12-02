@@ -3,8 +3,9 @@ package goanalysis
 import (
 	"os"
 	"strings"
-	"ycore/driver/load/project/goloader"
-	"ycore/util"
+
+	"github.com/YWJSonic/ycore/driver/load/project/goloader"
+	"github.com/YWJSonic/ycore/util"
 )
 
 // 專案節點樹分析 廣度優先

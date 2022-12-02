@@ -2,8 +2,9 @@ package myredis
 
 import (
 	"context"
-	"ycore/driver/database/redis"
-	"ycore/module/mylog"
+
+	"github.com/YWJSonic/ycore/driver/database/redis"
+	"github.com/YWJSonic/ycore/module/mylog"
 )
 
 // New redis manager

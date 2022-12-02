@@ -1,4 +1,4 @@
-module ycore
+module github.com/YWJSonic/ycore
 
 go 1.18
 

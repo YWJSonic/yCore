@@ -4,7 +4,8 @@ import (
 	"bytes"
 	"image/png"
 	"os"
-	"ycore/util"
+
+	"github.com/YWJSonic/ycore/util"
 )
 
 // 將 memory 資料存到本機 png
