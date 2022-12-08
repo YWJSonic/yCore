@@ -8,10 +8,10 @@ import (
 )
 
 // 快速發起請求使用 Default Client
-type MyDefaultHttp struct{}
+type MyDefaultClient struct{}
 
-func NewDefaultHttp() *MyDefaultHttp {
-	return &MyDefaultHttp{}
+func NewDefaultClient() *MyDefaultClient {
+	return &MyDefaultClient{}
 }
 
 //	取得網頁
@@ -20,7 +20,7 @@ func NewDefaultHttp() *MyDefaultHttp {
 //	@retrun map[string]string Http Header
 //	@return []byte Http Body
 //	@return error	錯誤回傳
-func (h *MyDefaultHttp) Get(url string) (map[string][]string, []byte, error) {
+func (h *MyDefaultClient) Get(url string) (map[string][]string, []byte, error) {
 	resp, err := http.Get(url)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "fetch: %v\n", err)
@@ -37,7 +37,7 @@ func (h *MyDefaultHttp) Get(url string) (map[string][]string, []byte, error) {
 //	@retrun map[string]string	Http Header
 //	@return []byte				Http Body
 //	@return error				錯誤回傳
-func (h *MyDefaultHttp) PostJson(url string, data string) (map[string][]string, []byte, error) {
+func (h *MyDefaultClient) PostJson(url string, data string) (map[string][]string, []byte, error) {
 	resp, err := http.Post(url, "application/json", strings.NewReader(data))
 	if err != nil {
 		return nil, nil, err

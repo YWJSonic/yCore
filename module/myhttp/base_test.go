@@ -17,7 +17,7 @@ func TestMyNew(t *testing.T) {
 		os.Exit(1)
 	}
 
-	res, err := myhttp.client.Do(req)
+	res, err := myhttp.dirver.Do(req)
 	fmt.Println(res, err)
 	head, b, err := loadHttpRespont(res)
 	fmt.Println(head, b, err)
