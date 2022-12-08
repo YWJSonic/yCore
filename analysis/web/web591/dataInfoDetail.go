@@ -9,25 +9,25 @@ type HomeDetail struct {
 }
 
 type HomeDetailData struct {
-	Breadcrumb    []Breadcrumb  `json:"breadcrumb"`
+	Breadcrumb    []Breadcrumb  `json:"breadcrumb"` // [0] 縣市資料 [1] 區資料 [2] 住家類型資料
 	Browse        Browse        `json:"browse"`
-	CostData      CostData      `json:"costData"`
+	CostData      CostData      `json:"costData"` // 租金外費用資料
 	DealText      string        `json:"dealText"`
 	DealTime      int64         `json:"dealTime"`
 	Deposit       string        `json:"deposit"`
-	FavData       FavData       `json:"favData"`
+	FavData       FavData       `json:"favData"` // 租用單位簡介
 	HouseDetail   HouseDetail   `json:"houseDetail"`
-	Info          []Info        `json:"info"`
+	Info          []Info        `json:"info"` // 租任單位格局資訊
 	InfoData      InfoData      `json:"infoData"`
 	Kind          int64         `json:"kind"`
 	LinkInfo      LinkInfo      `json:"linkInfo"`
 	NavData       []HouseDetail `json:"navData"`
 	PositionRound PositionRound `json:"positionRound"`
 	Preference    CostData      `json:"preference"`
-	Price         string        `json:"price"`
+	Price         string        `json:"price"` // 租金
 	PriceCache    []interface{} `json:"priceCache"`
 	PriceCacheTxt string        `json:"priceCacheTxt"`
-	PriceUnit     string        `json:"priceUnit"`
+	PriceUnit     string        `json:"priceUnit"` // 租金單位
 	Publish       Publish       `json:"publish"`
 	QuestionData  HouseDetail   `json:"questionData"`
 	RegionID      int64         `json:"regionId"`
@@ -39,6 +39,125 @@ type HomeDetailData struct {
 	ShareInfo     ShareInfo     `json:"shareInfo"`
 	Tags          []Tag         `json:"tags"`
 	Title         string        `json:"title"`
+}
+
+// 租金
+func (h *HomeDetailData) GetPrice() string {
+	return h.Price
+}
+
+// 租任時間限制
+func (h *HomeDetailData) GetDesc() string {
+	return h.Service.Desc
+}
+
+// 租任規則
+func (h *HomeDetailData) GetRule() string {
+	return h.Service.Rule
+}
+
+// 地址
+func (h *HomeDetailData) GetAddress() string {
+	return h.PositionRound.Address
+}
+
+// 縣市資料
+func (h *HomeDetailData) GetRegion() string {
+	for _, info := range h.Breadcrumb {
+		if info.Query == "region" {
+			return info.Name
+		}
+	}
+
+	return ""
+}
+
+// 市區資料
+func (h *HomeDetailData) GetSection() string {
+	for _, info := range h.Breadcrumb {
+		if info.Query == "section" {
+			return info.Name
+		}
+	}
+
+	return ""
+}
+
+// 押金
+func (h *HomeDetailData) GetDeposit() string {
+	for _, info := range h.CostData.Data {
+		if info.Key == "deposit" {
+			return info.Value
+		}
+	}
+
+	return ""
+}
+
+// 管理費
+func (h *HomeDetailData) GetManageprice() string {
+	for _, info := range h.CostData.Data {
+		if info.Key == "manageprice" && info.Value != "無" {
+			return info.Value
+		}
+	}
+
+	return ""
+}
+
+// 住宅 格局
+func (h *HomeDetailData) GetLayout() string {
+	for _, info := range h.Info {
+		if info.Key == "layout" {
+			return info.Value
+		}
+	}
+
+	return ""
+}
+
+// 住宅 坪數
+func (h *HomeDetailData) GetArea() string {
+	for _, info := range h.Info {
+		if info.Key == "area" {
+			return info.Value
+		}
+	}
+
+	return ""
+}
+
+// 住宅 樓層
+func (h *HomeDetailData) GetFloor() string {
+	for _, info := range h.Info {
+		if info.Key == "floor" {
+			return info.Value
+		}
+	}
+
+	return ""
+}
+
+// 住宅 型態
+func (h *HomeDetailData) GetShape() string {
+	for _, info := range h.Info {
+		if info.Key == "shape" {
+			return info.Value
+		}
+	}
+
+	return ""
+}
+
+// 住家類型名稱
+func (h *HomeDetailData) Getkind() string {
+	for _, info := range h.Breadcrumb {
+		if info.Query == "kind" {
+			return info.Name
+		}
+	}
+
+	return ""
 }
 
 type Breadcrumb struct {
@@ -53,7 +172,7 @@ type Browse struct {
 	PC     int64 `json:"pc"`
 }
 
-type CostData struct {
+type CostData struct { // 租用成本
 	Active   int64   `json:"active"`
 	Data     []Info  `json:"data"`
 	Title    string  `json:"title"`
@@ -61,21 +180,21 @@ type CostData struct {
 }
 
 type Info struct {
-	Key   string `json:"key"`
+	Key   string `json:"key"` // deposit: 押金, manageprice: 管理費
 	Name  string `json:"name"`
 	Value string `json:"value"`
 }
 
 type FavData struct {
-	Address  string `json:"address"`
-	Area     string `json:"area"`
+	Address  string `json:"address"` //地址
+	Area     string `json:"area"`    // 坪數
 	Count    int64  `json:"count"`
-	KindTxt  string `json:"kindTxt"`
-	Layout   string `json:"layout"`
-	Posttime int64  `json:"posttime"`
-	Price    int64  `json:"price"`
-	Thumb    string `json:"thumb"`
-	Title    string `json:"title"`
+	KindTxt  string `json:"kindTxt"`  // 住家類型名稱
+	Layout   string `json:"layout"`   // 租任單位格局
+	Posttime int64  `json:"posttime"` // 刊登時間
+	Price    int64  `json:"price"`    // 價格
+	Thumb    string `json:"thumb"`    // 縮圖
+	Title    string `json:"title"`    // 刊登標題
 }
 
 type HouseDetail struct {

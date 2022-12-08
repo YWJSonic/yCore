@@ -3,6 +3,7 @@ package web591
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -92,7 +93,53 @@ func GetData() {
 				continue
 			}
 
-			js, _ := util.Marshal(detailInfo.Data)
+			// js, _ := util.Marshal(detailInfo.Data)
+			// fmt.Println(string(js))
+
+			cost := []string{}
+			{
+				if detailInfo.Data.GetDeposit() != "" {
+					cost = append(cost, fmt.Sprintf("押金：[%s]", detailInfo.Data.GetDeposit()))
+				}
+				if detailInfo.Data.GetManageprice() != "" {
+					cost = append(cost, fmt.Sprintf("管理費：[%s]", detailInfo.Data.GetManageprice()))
+				}
+			}
+			layout := []string{}
+			{
+				if detailInfo.Data.GetLayout() != "" {
+					layout = append(layout, detailInfo.Data.GetLayout())
+				}
+				if detailInfo.Data.GetArea() != "" {
+					layout = append(layout, detailInfo.Data.GetArea())
+				}
+				if detailInfo.Data.GetFloor() != "" {
+					layout = append(layout, detailInfo.Data.GetFloor())
+				}
+				if detailInfo.Data.GetShape() != "" {
+					layout = append(layout, detailInfo.Data.GetShape())
+				}
+				if detailInfo.Data.Getkind() != "" {
+					layout = append(layout, detailInfo.Data.Getkind())
+				}
+			}
+			region := []string{}
+			{
+				if detailInfo.Data.GetLayout() != "" {
+					region = append(region, detailInfo.Data.GetRegion())
+				}
+				if detailInfo.Data.GetArea() != "" {
+					region = append(region, detailInfo.Data.GetSection())
+				}
+			}
+
+			rssContextReplas := strings.NewReplacer(
+				"$租金", detailInfo.Data.GetPrice(),
+				"$額外成本", strings.Join(cost, ` `),
+				"$格局", strings.Join(layout, ` `),
+				"$區域", strings.Join(region, ` `),
+			)
+			description := rssContextReplas.Replace(rssTemplate)
 
 			pageurl := util.Sprintf(targetPage, roomId)
 			homeResList = append(homeResList, pageurl)
@@ -101,7 +148,7 @@ func GetData() {
 				Link: &feeds.Link{
 					Href: pageurl,
 				},
-				Description: string(js),
+				Description: description,
 			})
 			mylog.Infof("[newDetail] Time Spand:%v ReqCount: %v", time.Since(startTime), reqWebCount)
 		}
@@ -141,6 +188,39 @@ func GetData() {
 		},
 	)
 }
+
+// func GetCostStr(data CostData) string {
+// 	str := ""
+// 	for _, info := range data.Data {
+// 		str += fmt.Sprintf("%s:%s ", info.Name, info.Value)
+// 	}
+// 	if str == "" {
+// 		str = "無"
+// 	}
+// 	return str
+// }
+
+// func GetInfoStr(datas []Info) string {
+// 	str := ""
+// 	for _, info := range datas {
+// 		str += fmt.Sprintf("%s ", info.Value)
+// 	}
+// 	if str == "" {
+// 		str = "無"
+// 	}
+// 	return str
+// }
+
+// func GetBreadcrumb(datas []Breadcrumb) string {
+// 	str := ""
+// 	for _, info := range datas {
+// 		str += fmt.Sprintf("%s ", info.Name)
+// 	}
+// 	if str == "" {
+// 		str = "無"
+// 	}
+// 	return str
+// }
 
 func getList(csrfToken string, url string) *HomeList {
 	req, _ := http.NewRequest("GET", url, nil)
