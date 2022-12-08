@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
-	"ycore/driver/connect/restful"
 	"ycore/module/mydb"
 	"ycore/module/myrestful"
 
@@ -23,12 +22,13 @@ func New() {
 	db = dbManager
 
 	// Restful
-	restfulRouter := myrestful.New()
+
+	restfulRouter := myrestful.GinNew()
 	Router(restfulRouter)
 	restfulRouter.Run(":8080")
 }
 
-func Router(router *restful.RestfulDriver) {
+func Router(router *myrestful.RestfulDriver) {
 	apiMap = append(apiMap, "GET '/'")
 	apiMap = append(apiMap, "GET '/types'")
 	apiMap = append(apiMap, "GET '/types/:typeId'")

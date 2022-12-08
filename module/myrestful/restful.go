@@ -1,4 +1,4 @@
-package restful
+package myrestful
 
 import (
 	"errors"
