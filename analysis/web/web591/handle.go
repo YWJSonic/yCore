@@ -178,7 +178,7 @@ func GetData() {
 	rssfeed.NewFeed(rssData)
 
 	time.Now().Format(time.RFC1123)
-	_ = dbManager.Insert(
+	_ = dbManager.Create(
 		context.TODO(),
 		"FilterHomeData",
 		DBStruct{

@@ -91,7 +91,7 @@ func GetWeb() {
 							if price > 0 {
 								nameSplite := strings.Split(filter.SubContent[subidx], ",")
 								if len(nameSplite) >= 2 {
-									_ = coolpcDB.Insert(context.TODO(), collectionName,
+									_ = coolpcDB.Create(context.TODO(), collectionName,
 										CacheStruct{
 											Date:       date,
 											UpdateTime: datetime,
@@ -103,7 +103,7 @@ func GetWeb() {
 											OriginName: filter.SubContent[subidx],
 										})
 								} else {
-									_ = coolpcDB.Insert(context.TODO(), collectionName,
+									_ = coolpcDB.Create(context.TODO(), collectionName,
 										CacheStruct{
 											Date:       date,
 											UpdateTime: datetime,
