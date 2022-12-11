@@ -13,8 +13,7 @@ func (self *WebsocketManager) OnClose(token string) {
 	self.apiCallBack.OnClose(token)
 }
 
-func (self *WebsocketManager) StoryClient(socketClient *socketclient.Handler) {
-
+func (self *WebsocketManager) StoryClient(socketClient socketclient.IHandle) {
 	self.clientMap.Store(socketClient.GetToken(), socketClient)
 }
 
