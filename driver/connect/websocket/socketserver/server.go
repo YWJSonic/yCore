@@ -41,5 +41,5 @@ func (self *Handle) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		self.socketManagerCallBack.OnSocketConnect(socketClient)
 	}
 	// 開始監聽 Client 訊號後才會通知 api handle 層有新連線
-	socketClient.Listen()
+	_ = socketClient.Listen()
 }

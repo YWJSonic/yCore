@@ -58,9 +58,10 @@ func New(ctx context.Context, conn *websocket.Conn, callBack SocketManagerCallBa
 // Websocket Client 啟動監聽
 //
 // @params context.Context client 啟動監聽
-func (self *Handler) Listen() {
+func (self *Handler) Listen() error {
 	self.listenHandle()
 	mylog.Infof("[SocketClient][%v] close done.", self.token)
+	return nil
 }
 
 // Websocket Client 識別編號
