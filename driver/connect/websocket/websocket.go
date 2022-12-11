@@ -16,7 +16,7 @@ import (
 )
 
 type ApiCallBack interface {
-	OnNewConnect(token string)
+	OnNewConnect(socketClient socketclient.IHandle)
 	OnClose(token string)
 	ReceiveMessage(ctx context.Context, socketClient *socketclient.Handler, message []byte)
 }
