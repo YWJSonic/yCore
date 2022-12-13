@@ -9,6 +9,11 @@ import (
 	"nhooyr.io/websocket"
 )
 
+const (
+	// 讀取限制 超過此大小連線將會被異常中斷
+	readLimit int64 = 1 * 1024 * 1024 // 1M
+)
+
 type SocketManagerCallBack interface {
 	// 連線通知分為兩部份驗證前, 驗證後
 	// 驗證前: 連線通知只通知道 socket Manager 但目前沒有需要處理的事
@@ -49,6 +54,7 @@ func New(ctx context.Context, conn *websocket.Conn, callBack SocketManagerCallBa
 		socketManagerCallBack: callBack,
 	}
 
+	conn.SetReadLimit(readLimit)
 	client.httpCtx, client.cancelFunc = context.WithCancel(ctx)
 	go client.read(client.httpCtx)
 
