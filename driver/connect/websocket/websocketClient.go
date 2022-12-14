@@ -3,7 +3,6 @@ package websocket
 import (
 	"context"
 	"fmt"
-	"time"
 
 	"github.com/YWJSonic/ycore/driver/connect/websocket/socketclient"
 	"nhooyr.io/websocket"
@@ -25,7 +24,7 @@ func (socket *Client) Launch(addr string) error {
 		return fmt.Errorf("[Websocket][Launch] addr Error addr: %v", addr)
 	}
 
-	ctx, cancel := context.WithTimeout(context.Background(), time.Minute)
+	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
 	conn, _, err := websocket.Dial(ctx, addr, nil)
