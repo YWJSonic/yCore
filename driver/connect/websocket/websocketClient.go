@@ -24,7 +24,7 @@ func (socket *Client) Launch(addr string) error {
 		return fmt.Errorf("[Websocket][Launch] addr Error addr: %v", addr)
 	}
 
-	ctx, cancel := context.WithCancel(context.Background())
+	ctx, cancel := context.WithCancel(context.TODO())
 	defer cancel()
 
 	conn, _, err := websocket.Dial(ctx, addr, nil)
