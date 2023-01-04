@@ -111,7 +111,7 @@ func (self *Manager) Delete(ctx context.Context, collection string, key string) 
 func (self *Manager) Transaction(ctx context.Context, action string, opt *driver.TransactionOptions, outDoc interface{}) error {
 	res, err := self.Client.Transaction(ctx, action, opt)
 	switch reflect.TypeOf(outDoc).Kind() {
-	case reflect.Pointer, reflect.Struct:
+	case reflect.Ptr, reflect.Struct:
 		jsByte, _ := json.Marshal(res)
 		err := json.Unmarshal(jsByte, outDoc)
 		if err != nil {
