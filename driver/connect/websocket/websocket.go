@@ -5,8 +5,6 @@ import (
 	"fmt"
 	"net"
 	"net/http"
-	"os"
-	"os/signal"
 	"time"
 
 	"github.com/YWJSonic/ycore/dao"
@@ -18,13 +16,14 @@ import (
 type ApiCallBack interface {
 	OnNewConnect(socketClient socketclient.IHandle)
 	OnClose(token string)
-	ReceiveMessage(ctx context.Context, socketClient *socketclient.Handler, message []byte)
+	ReceiveMessage(ctx context.Context, socketClient socketclient.IHandle, message []byte)
 }
 
 type WebsocketManager struct {
-	apiCallBack ApiCallBack
-	server      *socketserver.Handle
-	clientMap   dao.FastSyncMap
+	apiCallBack  ApiCallBack
+	serverHandle *socketserver.Handle
+	server       *http.Server
+	clientMap    dao.FastSyncMap
 }
 
 func New() *WebsocketManager {
@@ -48,30 +47,20 @@ func (self *WebsocketManager) Launch(addr string) error {
 		return fmt.Errorf("[Websocket][Launch] Listen Error addr: %v", addr)
 	}
 
-	self.server = socketserver.New()
-	self.server.ImportSocketManager(self)
+	self.serverHandle = socketserver.New()
+	self.serverHandle.ImportSocketManager(self)
 
-	s := &http.Server{
-		Handler:      self.server,
+	self.server = &http.Server{
+		Handler:      self.serverHandle,
 		ReadTimeout:  time.Second * 10,
 		WriteTimeout: time.Second * 10,
 	}
-	errc := make(chan error, 1)
 	mylog.Infof("[Websocket][Server] at %v", addr)
-	go func() {
-		errc <- s.Serve(l)
-	}()
+	return self.server.Serve(l)
+}
 
-	sigs := make(chan os.Signal, 1)
-	signal.Notify(sigs, os.Interrupt)
-	select {
-	case err := <-errc:
-		mylog.Errorf("[Websocket][Server] failed to launch serve: %v", err)
-	case f := <-sigs:
-		mylog.Errorf("[Websocket][Server] server be terminating: %v", f)
-	}
-
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
+func (self *WebsocketManager) Stop() error {
+	ctx, cancel := context.WithTimeout(context.TODO(), time.Second*10)
 	defer cancel()
-	return s.Shutdown(ctx)
+	return self.server.Shutdown(ctx)
 }

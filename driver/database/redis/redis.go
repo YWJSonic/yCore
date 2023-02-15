@@ -3,8 +3,6 @@ package redis
 import (
 	"context"
 	"errors"
-	"net/url"
-	"strings"
 	"time"
 
 	"github.com/YWJSonic/ycore/module/mylog"
@@ -12,17 +10,8 @@ import (
 	"github.com/go-redis/redis/v8"
 )
 
-func New(addr, password string, poolSize int) (redis.Cmdable, error) {
-	redisIPs := strings.Split(addr, ",")
-	for _, ip := range redisIPs {
-		_, err := url.Parse("http://" + ip)
-		if err != nil {
-			mylog.Errorf("[Redis][New] url Parse error: %v", err)
-			return nil, err
-		}
-	}
-
-	driver, err := connection(redisIPs, password, poolSize)
+func New(addr []string, password string, poolSize int) (redis.Cmdable, error) {
+	driver, err := connection(addr, password, poolSize)
 	if err != nil {
 		mylog.Errorf("[RedisDriver][New] connection error: %v", err)
 		return nil, err
