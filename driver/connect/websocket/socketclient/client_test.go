@@ -2,6 +2,7 @@ package socketclient
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"testing"
 
@@ -9,7 +10,7 @@ import (
 )
 
 func TestClient(t *testing.T) {
-	addr := "wss://127.0.0.1:5506"
+	addr := "ws://127.0.0.1:5506"
 
 	ctx, cancel := context.WithCancel(context.TODO())
 	defer cancel()
@@ -21,10 +22,13 @@ func TestClient(t *testing.T) {
 
 	mockTest := &mockTest{}
 	socket := New(ctx, conn, mockTest)
+	go socket.Ping()
 	socket.Listen()
 }
 
 type mockTest struct{}
 
-func (mockTest) OnClose(token string)                                                      {}
+func (mockTest) OnClose(token string) {
+	fmt.Println("----Client OnClose----")
+}
 func (mockTest) ReceiveMessage(ctx context.Context, socketClient *Handler, message []byte) {}

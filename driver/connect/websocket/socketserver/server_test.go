@@ -52,6 +52,8 @@ type mockTest struct{}
 func (mockTest) OnSocketConnect(socketClient *socketclient.Handler) {
 	fmt.Println("New Client:", socketClient.GetToken())
 }
-func (mockTest) OnClose(token string) {}
+func (mockTest) OnClose(token string) {
+	fmt.Println("----Server OnClose----")
+}
 func (mockTest) ReceiveMessage(ctx context.Context, socketClient *socketclient.Handler, message []byte) {
 }

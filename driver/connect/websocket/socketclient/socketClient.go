@@ -2,6 +2,7 @@ package socketclient
 
 import (
 	"context"
+	"time"
 
 	"github.com/YWJSonic/ycore/module/mylog"
 
@@ -94,6 +95,7 @@ func (self *Handler) listenHandle() {
 
 // WebSocket 監聽
 func (self *Handler) read(ctx context.Context) {
+	defer self.close(websocket.StatusInternalError, "read err")
 	for {
 		select {
 		case <-ctx.Done():
@@ -110,12 +112,22 @@ func (self *Handler) read(ctx context.Context) {
 				} else {
 					mylog.Errorf("[SocketClient][%v] read error: %v", self.token, err)
 				}
-				self.close(websocket.StatusInternalError, "read err")
 				return
 			}
 
 			// 訊息轉拋
 			go self.socketManagerCallBack.ReceiveMessage(handleCtx, self, msg)
+		}
+	}
+}
+
+func (self *Handler) Ping() {
+	ticker := time.NewTicker(time.Second)
+	defer ticker.Stop()
+	for range ticker.C {
+		if err := self.conn.Ping(self.httpCtx); err != nil {
+			mylog.Errorf("[SocketClient][%v] ping error: %v", self.token, err)
+			return
 		}
 	}
 }
@@ -126,6 +138,6 @@ func (self *Handler) Close(code websocket.StatusCode, errorMsg string) {
 
 // 關閉 weboscket connect 並關閉 socket client ctx
 func (self *Handler) close(code websocket.StatusCode, errorMsg string) {
-	self.conn.Close(websocket.StatusInternalError, errorMsg)
+	self.conn.Close(code, errorMsg)
 	self.cancelFunc()
 }
