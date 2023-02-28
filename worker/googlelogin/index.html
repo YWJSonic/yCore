@@ -1,0 +1,28 @@
+<html>
+  <body>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<div id="g_id_onload"
+data-client_id="14099599407-n78q9cn8eslht1ksculubui6oujn4mav.apps.googleusercontent.com"
+data-context="signin"
+data-ux_mode="popup"
+data-login_uri="http://localhost/ouath/google/login"
+data-auto_prompt="false">
+</div>
+<div class="g_id_signin"
+data-type="standard"
+data-size="medium"
+data-theme="filled_blue"
+data-text="signin_with"
+data-shape="pill"
+data-callback="onSinbgIn" 
+data-logo_alignment="left">
+</div>
+<script>
+  function onSinbgIn(googleUser){
+    var profile = googleUser.getBasicProfile();
+    console.log("------------------")
+    console.log(googleUser.getBasicProfile().getEmail())
+  }
+  </script>
+  </body>
+</html>
