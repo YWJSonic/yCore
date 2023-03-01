@@ -45,7 +45,7 @@ func New() {
 
 		// 使用存取權杖來存取 Facebook API，例如取得用戶的基本資訊
 		client := conf.Client(c.Request.Context(), token)
-		resp, err := client.Get("https://graph.facebook.com/v13.0/me?fields=id,name,email")
+		resp, err := client.Get("https://graph.facebook.com/v16.0/me?fields=id,name,email")
 		if err != nil {
 			c.AbortWithError(http.StatusInternalServerError, err)
 			return
@@ -68,6 +68,30 @@ func New() {
 
 		// 回應用戶
 		c.String(http.StatusOK, fmt.Sprintf("Welcome, %s!", user.Name))
+	})
+	r.POST("/logincallback", func(c *gin.Context) {
+		// 解析前端完成登入後得回傳資料
+		var authRes struct {
+			AuthResponse struct {
+				AccessToken                 string `json:"accessToken"`
+				UserID                      string `json:"userID"`
+				ExpiresIn                   int    `json:"expiresIn"`
+				SignedRequest               string `json:"signedRequest"`
+				GraphDomain                 string `json:"graphDomain"`
+				Data_access_expiration_time int    `json:"data_access_expiration_time"`
+			} `json:"authResponse"`
+			Status string `json:"status"`
+		}
+		err := json.NewDecoder(c.Request.Body).Decode(&authRes)
+		if err != nil {
+			c.AbortWithError(http.StatusInternalServerError, err)
+			return
+		}
+
+		// 在這裡使用用戶的資訊來進行登入或註冊
+
+		// 回應用戶
+		c.String(http.StatusOK, fmt.Sprintf("Welcome, %s!", authRes.AuthResponse.UserID))
 	})
 
 	// 啟動應用程式
