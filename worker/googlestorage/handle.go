@@ -1,0 +1,5 @@
+package googlestorage
+
+func New() {
+
+}
