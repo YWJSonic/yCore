@@ -84,6 +84,11 @@ github.com/gofiber/helmet/v2
 github.com/gogo/protobuf/gogoproto
 github.com/gogo/protobuf/proto
 github.com/gogo/protobuf/protoc-gen-gogo/descriptor
+# github.com/golang-jwt/jwt v3.2.2+incompatible
+## explicit
+# github.com/golang-jwt/jwt/v5 v5.0.0-rc.2
+## explicit; go 1.18
+github.com/golang-jwt/jwt/v5
 # github.com/golang/protobuf v1.5.2
 ## explicit; go 1.9
 github.com/golang/protobuf/jsonpb
