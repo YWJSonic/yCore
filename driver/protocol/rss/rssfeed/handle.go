@@ -6,8 +6,9 @@ import (
 	"os"
 	"strings"
 	"time"
-	"ycore/driver/writefile"
-	"ycore/module/mylog"
+
+	"github.com/YWJSonic/ycore/driver/writefile"
+	"github.com/YWJSonic/ycore/module/mylog"
 
 	"github.com/gorilla/feeds"
 	"github.com/mmcdole/gofeed"

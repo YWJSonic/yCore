@@ -3,8 +3,9 @@ package myhtml
 import (
 	"io"
 	"log"
-	"ycore/types"
-	"ycore/util"
+
+	"github.com/YWJSonic/ycore/types"
+	"github.com/YWJSonic/ycore/util"
 
 	"golang.org/x/net/html"
 )

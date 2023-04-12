@@ -5,7 +5,8 @@ import (
 	"errors"
 	"fmt"
 	"time"
-	"ycore/driver/connect/grpcconn/streamproto"
+
+	"github.com/YWJSonic/ycore/driver/connect/grpcconn/streamproto"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"

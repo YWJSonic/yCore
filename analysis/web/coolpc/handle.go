@@ -7,11 +7,12 @@ import (
 	"strconv"
 	"strings"
 	"sync"
-	"ycore/module/mydb"
-	"ycore/module/myhtml"
-	"ycore/module/mylog"
-	"ycore/types"
-	"ycore/util"
+
+	"github.com/YWJSonic/ycore/module/mydb"
+	"github.com/YWJSonic/ycore/module/myhtml"
+	"github.com/YWJSonic/ycore/module/mylog"
+	"github.com/YWJSonic/ycore/types"
+	"github.com/YWJSonic/ycore/util"
 
 	"golang.org/x/net/html"
 )
@@ -90,7 +91,7 @@ func GetWeb() {
 							if price > 0 {
 								nameSplite := strings.Split(filter.SubContent[subidx], ",")
 								if len(nameSplite) >= 2 {
-									_ = coolpcDB.Insert(context.TODO(), collectionName,
+									_ = coolpcDB.Create(context.TODO(), collectionName,
 										CacheStruct{
 											Date:       date,
 											UpdateTime: datetime,
@@ -102,7 +103,7 @@ func GetWeb() {
 											OriginName: filter.SubContent[subidx],
 										})
 								} else {
-									_ = coolpcDB.Insert(context.TODO(), collectionName,
+									_ = coolpcDB.Create(context.TODO(), collectionName,
 										CacheStruct{
 											Date:       date,
 											UpdateTime: datetime,

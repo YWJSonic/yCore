@@ -2,7 +2,8 @@ package coolpc
 
 import (
 	"context"
-	"ycore/module/mydb"
+
+	"github.com/YWJSonic/ycore/module/mydb"
 
 	"github.com/arangodb/go-driver"
 )

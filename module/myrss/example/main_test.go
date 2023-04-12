@@ -2,9 +2,10 @@ package example
 
 import (
 	"testing"
-	"ycore/module/myhtml"
-	"ycore/module/mylog"
-	"ycore/module/myrss"
+
+	"github.com/YWJSonic/ycore/module/myhtml"
+	"github.com/YWJSonic/ycore/module/mylog"
+	"github.com/YWJSonic/ycore/module/myrss"
 )
 
 func TestRss(t *testing.T) {

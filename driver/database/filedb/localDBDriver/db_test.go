@@ -2,7 +2,8 @@ package localDBDriver
 
 import (
 	"testing"
-	"ycore/module/mylog"
+
+	"github.com/YWJSonic/ycore/module/mylog"
 )
 
 func TestLocal(t *testing.T) {

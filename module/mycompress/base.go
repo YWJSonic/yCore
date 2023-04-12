@@ -2,7 +2,8 @@ package mycompress
 
 import (
 	"context"
-	"ycore/driver/compress/zstd"
+
+	"github.com/YWJSonic/ycore/driver/compress/zstd"
 )
 
 type Handle struct {

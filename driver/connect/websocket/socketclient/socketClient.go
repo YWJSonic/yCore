@@ -2,10 +2,17 @@ package socketclient
 
 import (
 	"context"
-	"ycore/module/mylog"
+	"time"
+
+	"github.com/YWJSonic/ycore/module/mylog"
 
 	"go.uber.org/atomic"
 	"nhooyr.io/websocket"
+)
+
+const (
+	// 讀取限制 超過此大小連線將會被異常中斷
+	readLimit int64 = 1 * 1024 * 1024 // 1M
 )
 
 type SocketManagerCallBack interface {
@@ -48,6 +55,7 @@ func New(ctx context.Context, conn *websocket.Conn, callBack SocketManagerCallBa
 		socketManagerCallBack: callBack,
 	}
 
+	conn.SetReadLimit(readLimit)
 	client.httpCtx, client.cancelFunc = context.WithCancel(ctx)
 	go client.read(client.httpCtx)
 
@@ -57,9 +65,10 @@ func New(ctx context.Context, conn *websocket.Conn, callBack SocketManagerCallBa
 // Websocket Client 啟動監聽
 //
 // @params context.Context client 啟動監聽
-func (self *Handler) Listen() {
+func (self *Handler) Listen() error {
 	self.listenHandle()
 	mylog.Infof("[SocketClient][%v] close done.", self.token)
+	return nil
 }
 
 // Websocket Client 識別編號
@@ -86,6 +95,7 @@ func (self *Handler) listenHandle() {
 
 // WebSocket 監聽
 func (self *Handler) read(ctx context.Context) {
+	defer self.close(websocket.StatusInternalError, "read err")
 	for {
 		select {
 		case <-ctx.Done():
@@ -102,12 +112,22 @@ func (self *Handler) read(ctx context.Context) {
 				} else {
 					mylog.Errorf("[SocketClient][%v] read error: %v", self.token, err)
 				}
-				self.close(websocket.StatusInternalError, "read err")
 				return
 			}
 
 			// 訊息轉拋
 			go self.socketManagerCallBack.ReceiveMessage(handleCtx, self, msg)
+		}
+	}
+}
+
+func (self *Handler) Ping() {
+	ticker := time.NewTicker(time.Second)
+	defer ticker.Stop()
+	for range ticker.C {
+		if err := self.conn.Ping(self.httpCtx); err != nil {
+			mylog.Errorf("[SocketClient][%v] ping error: %v", self.token, err)
+			return
 		}
 	}
 }
@@ -118,6 +138,6 @@ func (self *Handler) Close(code websocket.StatusCode, errorMsg string) {
 
 // 關閉 weboscket connect 並關閉 socket client ctx
 func (self *Handler) close(code websocket.StatusCode, errorMsg string) {
-	self.conn.Close(websocket.StatusInternalError, errorMsg)
+	self.conn.Close(code, errorMsg)
 	self.cancelFunc()
 }

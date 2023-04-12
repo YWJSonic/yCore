@@ -5,9 +5,10 @@ import (
 	"log"
 	"sync"
 	"testing"
-	"ycore/driver/compress/zstd"
-	"ycore/module/mylog"
-	"ycore/util"
+
+	"github.com/YWJSonic/ycore/driver/compress/zstd"
+	"github.com/YWJSonic/ycore/module/mylog"
+	"github.com/YWJSonic/ycore/util"
 )
 
 func Test_To(t *testing.T) {

@@ -7,7 +7,8 @@ import (
 	"errors"
 	"fmt"
 	"strings"
-	"ycore/util"
+
+	"github.com/YWJSonic/ycore/util"
 
 	"golang.org/x/crypto/argon2"
 )

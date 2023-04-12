@@ -6,10 +6,10 @@ import (
 	"testing"
 	"time"
 
-	"ycore/driver/connect/grpcconn"
-	"ycore/module/mylog"
-	echo "ycore/proto"
-	"ycore/util"
+	"github.com/YWJSonic/ycore/driver/connect/grpcconn"
+	"github.com/YWJSonic/ycore/module/mylog"
+	echo "github.com/YWJSonic/ycore/proto"
+	"github.com/YWJSonic/ycore/util"
 
 	"google.golang.org/grpc"
 )
