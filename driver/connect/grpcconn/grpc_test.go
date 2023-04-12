@@ -5,7 +5,8 @@ import (
 	"fmt"
 	"testing"
 	"time"
-	"ycore/driver/connect/grpcconn/grpcproto"
+
+	"github.com/YWJSonic/ycore/driver/connect/grpcconn/grpcproto"
 
 	"google.golang.org/grpc"
 )

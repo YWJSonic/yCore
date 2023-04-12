@@ -3,7 +3,8 @@ package mylog
 import (
 	"fmt"
 	"time"
-	"ycore/util"
+
+	"github.com/YWJSonic/ycore/util"
 )
 
 func Info(format interface{}) {

@@ -4,8 +4,9 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
-	"ycore/module/mydb"
-	"ycore/module/myrestful"
+
+	"github.com/YWJSonic/ycore/module/mydb"
+	"github.com/YWJSonic/ycore/module/myrestful"
 
 	"github.com/gin-gonic/gin"
 )

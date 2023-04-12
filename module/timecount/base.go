@@ -2,7 +2,8 @@ package timecount
 
 import (
 	"time"
-	"ycore/util"
+
+	"github.com/YWJSonic/ycore/util"
 )
 
 // 生成新計時器

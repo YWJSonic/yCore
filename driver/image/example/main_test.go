@@ -2,8 +2,9 @@ package example
 
 import (
 	"testing"
-	"ycore/driver/image/png"
-	"ycore/module/myhtml"
+
+	"github.com/YWJSonic/ycore/driver/image/png"
+	"github.com/YWJSonic/ycore/module/myhtml"
 )
 
 func TestDo(t *testing.T) {

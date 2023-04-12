@@ -2,8 +2,9 @@ package config
 
 import (
 	"time"
-	"ycore/driver/load/file/yamlloader"
-	"ycore/module/mylog"
+
+	"github.com/YWJSonic/ycore/driver/load/file/yamlloader"
+	"github.com/YWJSonic/ycore/module/mylog"
 )
 
 var EnvInfo *Env

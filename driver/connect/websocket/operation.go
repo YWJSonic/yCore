@@ -1,9 +1,8 @@
 package websocket
 
 import (
-	"ycore/constant"
-	"ycore/driver/connect/websocket/socketclient"
-	"ycore/module/mylog"
+	"github.com/YWJSonic/ycore/constant"
+	"github.com/YWJSonic/ycore/driver/connect/websocket/socketclient"
 )
 
 // 通知 Websocket Manager 有連線被中斷
@@ -13,8 +12,7 @@ func (self *WebsocketManager) OnClose(token string) {
 	self.apiCallBack.OnClose(token)
 }
 
-func (self *WebsocketManager) StoryClient(socketClient *socketclient.Handler) {
-
+func (self *WebsocketManager) StoryClient(socketClient socketclient.IHandle) {
 	self.clientMap.Store(socketClient.GetToken(), socketClient)
 }
 
@@ -33,7 +31,6 @@ func (self *WebsocketManager) GetBalanceClient() socketclient.IHandle {
 	var weight int64 = int64(constant.MaxInt)
 	var client *socketclient.Handler
 	self.clientMap.Range(func(key string, value interface{}) bool {
-		mylog.Infof("[Websocket][GetBalanceClient] token: %v, weight: %v", value.(*socketclient.Handler).GetToken(), value.(*socketclient.Handler).GetWeight())
 		if value.(*socketclient.Handler).GetWeight() < weight {
 			weight = value.(*socketclient.Handler).GetWeight()
 			client = value.(*socketclient.Handler)
@@ -42,4 +39,14 @@ func (self *WebsocketManager) GetBalanceClient() socketclient.IHandle {
 	})
 
 	return client
+}
+
+func (self *WebsocketManager) GetAllClient() map[string]socketclient.IHandle {
+	clients := map[string]socketclient.IHandle{}
+	self.clientMap.Range(func(key string, value interface{}) bool {
+		clients[key] = value.(*socketclient.Handler)
+		return true
+	})
+
+	return clients
 }

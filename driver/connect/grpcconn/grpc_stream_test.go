@@ -6,7 +6,8 @@ import (
 	"sync"
 	"testing"
 	"time"
-	"ycore/driver/connect/grpcconn/streamproto"
+
+	"github.com/YWJSonic/ycore/driver/connect/grpcconn/streamproto"
 )
 
 func mockStreamServerClient() (IGrpcStreamServer, IGrpcStreamClient) {

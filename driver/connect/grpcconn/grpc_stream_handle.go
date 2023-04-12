@@ -1,6 +1,6 @@
 package grpcconn
 
-import "ycore/driver/connect/grpcconn/streamproto"
+import "github.com/YWJSonic/ycore/driver/connect/grpcconn/streamproto"
 
 type onRead func(string, *streamproto.Message)
 

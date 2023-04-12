@@ -3,8 +3,9 @@ package myrss
 import (
 	"bytes"
 	"encoding/xml"
-	"ycore/dao/queue"
-	"ycore/module/mylog"
+
+	"github.com/YWJSonic/ycore/dao/queue"
+	"github.com/YWJSonic/ycore/module/mylog"
 )
 
 type NodeType uint8

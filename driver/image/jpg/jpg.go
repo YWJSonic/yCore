@@ -4,7 +4,8 @@ import (
 	"bytes"
 	"image/jpeg"
 	"os"
-	"ycore/util"
+
+	"github.com/YWJSonic/ycore/util"
 )
 
 func NewImage(data []byte, filePath, fileName string) {

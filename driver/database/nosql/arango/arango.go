@@ -2,7 +2,8 @@ package arango
 
 import (
 	"context"
-	"ycore/module/mylog"
+
+	"github.com/YWJSonic/ycore/module/mylog"
 
 	"github.com/arangodb/go-driver"
 	"github.com/arangodb/go-driver/http"

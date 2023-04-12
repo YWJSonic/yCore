@@ -4,7 +4,8 @@ import (
 	"context"
 	"errors"
 	"time"
-	"ycore/module/mylog"
+
+	"github.com/YWJSonic/ycore/module/mylog"
 
 	"github.com/go-redis/redis/v8"
 )

@@ -1,4 +1,4 @@
-module ycore
+module github.com/YWJSonic/ycore
 
 go 1.18
 
@@ -9,6 +9,7 @@ require (
 	github.com/gofiber/fiber/v2 v2.40.0
 	github.com/gofiber/helmet/v2 v2.2.21
 	github.com/gogo/protobuf v1.3.2
+	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/golang/protobuf v1.5.2
 	github.com/gorilla/feeds v1.1.1
 	github.com/json-iterator/go v1.1.12
@@ -39,6 +40,7 @@ require (
 	github.com/go-playground/validator/v10 v10.10.0 // indirect
 	github.com/gobwas/ws v1.1.0-rc.5 // indirect
 	github.com/goccy/go-json v0.9.7 // indirect
+	github.com/golang-jwt/jwt/v5 v5.0.0-rc.2 // indirect
 	github.com/google/go-cmp v0.5.8 // indirect
 	github.com/gorilla/websocket v1.4.2 // indirect
 	github.com/hashicorp/golang-lru v0.5.1 // indirect

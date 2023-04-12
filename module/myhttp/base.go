@@ -1,28 +1,52 @@
 package myhttp
 
 import (
-	"log"
+	"fmt"
 	"net/http"
+	"net/url"
+	"os"
+	"strings"
 )
 
-func GetCookie(req *http.Request) []*http.Cookie {
-	res, err := http.DefaultClient.Do(req)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer res.Body.Close()
-	return res.Cookies()
+type MyClient struct {
+	dirver *http.Client
 }
 
-// @params string name
-// @params string value
-// @params string maxget(s/秒)
-//
-// @return *http.Cookie
-func NewCookie(name, value string, maxget int) *http.Cookie {
-	return &http.Cookie{
-		Name:   name,
-		Value:  value,
-		MaxAge: maxget,
+func New() *MyClient {
+	myHttp := &MyClient{
+		dirver: &http.Client{},
 	}
+	return myHttp
+}
+
+//	取得網頁
+//	@parame string 網址
+//
+//	@retrun map[string]string Http Header
+//	@return []byte Http Body
+//	@return error	錯誤回傳
+func (h *MyClient) Get(url url.URL) (map[string][]string, []byte, error) {
+	resp, err := h.dirver.Get(url.Path)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "fetch: %v\n", err)
+		return nil, nil, err
+	}
+
+	return loadHttpRespont(resp)
+}
+
+//	取得網頁
+//	@parame string		網址
+//	@parame url.Values	Post資料
+//
+//	@retrun map[string]string	Http Header
+//	@return []byte				Http Body
+//	@return error				錯誤回傳
+func (h *MyClient) PostJson(url url.URL, data string) (map[string][]string, []byte, error) {
+	resp, err := h.dirver.Post(url.Path, "application/json", strings.NewReader(data))
+	if err != nil {
+		return nil, nil, err
+	}
+
+	return loadHttpRespont(resp)
 }
