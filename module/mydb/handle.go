@@ -22,24 +22,48 @@ func (self *Manager) Quary(ctx context.Context, query string, bindVars map[strin
 		return nil
 	}
 
-	list := []interface{}{}
+	docs := []interface{}{}
 	for {
 		doc := make(map[string]interface{})
 		_, err = cursor.ReadDocument(ctx, &doc)
 		if driver.IsNoMoreDocuments(err) {
 			break
 		}
-		list = append(list, doc)
+		docs = append(docs, doc)
 	}
 
 	// 避免driver撈出科學記號數字變成浮點數，過一層轉換將金額欄位維持整數格式
-	bytes, err := util.Marshal(list)
+	bytes, err := util.Marshal(docs)
 	if err != nil {
 		return err
 	}
 	err = util.Unmarshal(bytes, outDoc)
 	if err != nil {
 		return err
+	}
+
+	return err
+}
+
+// Quary String
+func (self *Manager) QuaryMap(ctx context.Context, query string, bindVars map[string]interface{}, outDoc map[string]interface{}) error {
+	cursor, err := self.Client.Query(ctx, query, bindVars)
+	if err != nil {
+		return err
+	}
+	defer cursor.Close()
+
+	if !cursor.HasMore() {
+		return nil
+	}
+
+	for {
+		doc := make(map[string]interface{})
+		meta, err := cursor.ReadDocument(ctx, &doc)
+		if driver.IsNoMoreDocuments(err) {
+			break
+		}
+		outDoc[meta.Key] = doc
 	}
 
 	return err
