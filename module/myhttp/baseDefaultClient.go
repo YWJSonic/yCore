@@ -3,6 +3,7 @@ package myhttp
 import (
 	"fmt"
 	"net/http"
+	"net/http/cookiejar"
 	"os"
 	"strings"
 )
@@ -11,6 +12,8 @@ import (
 type MyDefaultClient struct{}
 
 func NewDefaultClient() *MyDefaultClient {
+	jar, _ := cookiejar.New(nil)
+	http.DefaultClient.Jar = jar
 	return &MyDefaultClient{}
 }
 
