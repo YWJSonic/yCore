@@ -3,6 +3,7 @@ package myhttp
 import (
 	"fmt"
 	"net/http"
+	"net/http/cookiejar"
 	"net/url"
 	"os"
 	"strings"
@@ -13,8 +14,11 @@ type MyClient struct {
 }
 
 func New() *MyClient {
+	jar, _ := cookiejar.New(nil)
 	myHttp := &MyClient{
-		dirver: &http.Client{},
+		dirver: &http.Client{
+			Jar: jar,
+		},
 	}
 	return myHttp
 }
