@@ -23,6 +23,10 @@ func New() *MyClient {
 	return myHttp
 }
 
+func (h *MyClient) GetClient() *http.Client {
+	return h.dirver
+}
+
 //	取得網頁
 //	@parame string 網址
 //
