@@ -14,7 +14,7 @@ func NewImage(data []byte, filePath, fileName string) {
 		panic(err)
 	}
 
-	f, err := os.Create(util.Sprintf("%s/%s.png", filePath, fileName))
+	f, err := os.Create(util.Sprintf("%s/%s.jpg", filePath, fileName))
 	if err != nil {
 		panic(err)
 	}
