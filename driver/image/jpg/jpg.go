@@ -4,20 +4,23 @@ import (
 	"bytes"
 	"image/jpeg"
 	"os"
-
-	"github.com/YWJSonic/ycore/util"
+	"path/filepath"
 )
 
-func NewImage(data []byte, filePath, fileName string) {
+func NewImage(data []byte, filePath, fileName string) error {
 	img, err := jpeg.Decode(bytes.NewBuffer(data))
 	if err != nil {
-		panic(err)
+		return err
 	}
 
-	f, err := os.Create(util.Sprintf("%s/%s.jpg", filePath, fileName))
+	path := filepath.Join(filePath, fileName+".jpeg")
+	f, err := os.Create(path)
 	if err != nil {
-		panic(err)
+		return err
 	}
 	defer f.Close()
-	_ = jpeg.Encode(f, img, nil)
+	if err = jpeg.Encode(f, img, nil); err != nil {
+		return err
+	}
+	return nil
 }
