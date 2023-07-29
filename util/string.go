@@ -4,7 +4,14 @@ import (
 	"regexp"
 	"strings"
 	"unicode"
+
+	"github.com/rs/xid"
 )
+
+// 生成亂數字串
+func UnitStr() string {
+	return xid.New().String()
+}
 
 // 移除無法顯示的 unicode
 func RemoveUnPrintUncode(source string) string {
