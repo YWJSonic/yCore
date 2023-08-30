@@ -1,5 +1,10 @@
 package util
 
+import (
+	"math/rand"
+	"sort"
+)
+
 // 取得目標存在於來源陣列的索引值
 //
 // @params []T 索引來源
@@ -180,4 +185,86 @@ func RemoveIndexMulti[T comparable](source []T, idxs []int) []T {
 	}
 
 	return newSource
+}
+
+func Shuffle[T int64](source []T) []T {
+	count := len(source)
+	if count < 2 {
+		return source
+	}
+
+	indexs := make([]int, count)
+	for i, count := 0, len(source); i < count; i++ {
+		indexs[i] = i
+	}
+	s := rand.NewSource(ServerTimeNow().Unix())
+	r := rand.New(s)
+	r.Shuffle(count, func(i, j int) {
+		indexs[i], indexs[j] = indexs[j], indexs[i]
+	})
+
+	newArr := []T{}
+	for i := 0; i < len(indexs); i++ {
+		newArr = append(newArr, source[indexs[i]])
+	}
+	return newArr
+}
+
+func ShufflePoint[T int64](source []T) {
+	count := len(source)
+	if count < 2 {
+		return
+	}
+
+	s := rand.NewSource(ServerTimeNow().Unix())
+	r := rand.New(s)
+	r.Shuffle(count, func(i, j int) {
+		source[i], source[j] = source[j], source[i]
+	})
+
+}
+
+func Sort[T int64](source []T, desc ...bool) []T {
+	count := len(source)
+	if count < 2 {
+		return source
+	}
+
+	indexs := make([]int, count)
+	for i, count := 0, len(source); i < count; i++ {
+		indexs[i] = i
+	}
+
+	if len(desc) > 0 && desc[0] {
+		sort.Slice(indexs, func(i, j int) bool {
+			return source[indexs[i]] > source[indexs[j]]
+		})
+	} else {
+		sort.Slice(indexs, func(i, j int) bool {
+			return source[indexs[i]] < source[indexs[j]]
+		})
+	}
+
+	newArr := []T{}
+	for i := 0; i < len(indexs); i++ {
+		newArr = append(newArr, source[indexs[i]])
+	}
+	return newArr
+}
+
+func SortPoint[T int64 | float64](source []T, desc ...bool) {
+	count := len(source)
+	if count < 2 {
+		return
+	}
+
+	if len(desc) > 0 && desc[0] {
+		sort.Slice(source, func(i, j int) bool {
+			return source[i] > source[j]
+		})
+	} else {
+		sort.Slice(source, func(i, j int) bool {
+			return source[i] < source[j]
+		})
+	}
 }
