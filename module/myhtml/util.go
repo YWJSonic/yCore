@@ -1,6 +1,7 @@
 package myhtml
 
 import (
+	"bytes"
 	"strings"
 
 	"golang.org/x/net/html"
@@ -40,4 +41,44 @@ func IsTextEnd(text string) bool {
 		}
 	}
 	return false
+}
+
+// 取得節點附加參數
+//
+// @params attrKey 附加參數關鍵字
+//
+// @params []html.Attribute 附加參數列表
+//
+// @return string 附加參數資料, PS: 預設為空字串
+func GetAttr(attrKey string, attrs []html.Attribute) string {
+	for _, attr := range attrs {
+		if attr.Key == attrKey {
+			return attr.Val
+		}
+	}
+	return ""
+}
+
+// 取得所有子物件內文
+//
+// @params *TokenObjSub 起始解點
+//
+// @return string 內文
+func GetContext(node *TokenObjSub) string {
+	res := bytes.Buffer{}
+	if node.Res.Type == html.TextToken {
+		res.WriteString(node.Res.Data)
+		return res.String()
+	}
+
+	for _, subnode := range node.SubRes {
+		if subnode.Res.Type == html.TextToken {
+			res.WriteString(subnode.Res.Data)
+		} else {
+			subContext := GetContext(subnode)
+			res.WriteString(subContext)
+		}
+	}
+
+	return res.String()
 }
