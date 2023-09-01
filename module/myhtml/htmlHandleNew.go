@@ -5,6 +5,7 @@ import (
 	"log"
 
 	"github.com/YWJSonic/ycore/types"
+	"github.com/YWJSonic/ycore/util"
 	"golang.org/x/net/html"
 )
 
@@ -23,6 +24,10 @@ type TokenObjSub struct {
 	SubRes    []*TokenObjSub // 子標籤結構
 }
 
+type HtmlLoopTool struct {
+	SelfClosingTagToken []string
+}
+
 // 建立全物件索引, 並索引符合條件的物件
 //
 // @params *html.Tokenizer 頁面資料
@@ -30,8 +35,7 @@ type TokenObjSub struct {
 // @params map[types.TokenTypeName][]*FilterObjnewSub 塞選器物件
 //
 // @params func(nodeDepth int, next, current, previous **TokenObjSub) (int, bool) 頁面修正方法
-func HtmlLoopFilterLevelSub(tokenizer *html.Tokenizer, filterMap map[types.TokenTypeName][]*FilterObjnewSub, pageFix func(nodeDepth int, next, current, previous **TokenObjSub) (int, bool)) {
-
+func (self HtmlLoopTool) HtmlLoopFilterLevelSub(tokenizer *html.Tokenizer, filterMap map[types.TokenTypeName][]*FilterObjnewSub, pageFix func(nodeDepth int, next, current, previous **TokenObjSub) (int, bool)) {
 	var previous, current *TokenObjSub
 	nodeDepth := 0 // 層級深度 0~n
 	nodeId := 0    // 節點編號 1~n
@@ -49,11 +53,8 @@ func HtmlLoopFilterLevelSub(tokenizer *html.Tokenizer, filterMap map[types.Token
 
 		// 調整標籤類型 *有可能開發者未填入結束標籤
 		htmlType := token.Type
-		if token.Type == html.StartTagToken {
-			switch token.Data {
-			case "meta", "link", "input", "img":
-				htmlType = html.SelfClosingTagToken
-			}
+		if util.Contains(self.SelfClosingTagToken, token.Data) {
+			htmlType = html.SelfClosingTagToken
 		}
 
 		switch htmlType {
@@ -158,4 +159,11 @@ func HtmlLoopFilterLevelSub(tokenizer *html.Tokenizer, filterMap map[types.Token
 			}
 		}
 	}
+}
+
+func HtmlLoopFilterLevelSub(tokenizer *html.Tokenizer, filterMap map[types.TokenTypeName][]*FilterObjnewSub, pageFix func(nodeDepth int, next, current, previous **TokenObjSub) (int, bool)) {
+	tool := HtmlLoopTool{
+		SelfClosingTagToken: []string{"meta", "link", "input", "img"},
+	}
+	tool.HtmlLoopFilterLevelSub(tokenizer, filterMap, pageFix)
 }
