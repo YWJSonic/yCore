@@ -1,6 +1,7 @@
 package util
 
 import (
+	"encoding/hex"
 	"time"
 
 	"golang.org/x/text/encoding/traditionalchinese"
@@ -48,4 +49,8 @@ func IsTransDate(startTime, endTime time.Time) bool {
 		return true
 	}
 	return false
+}
+
+func HexToByte(hexString string) ([]byte, error) {
+	return hex.DecodeString(hexString)
 }
