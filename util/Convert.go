@@ -1,6 +1,7 @@
 package util
 
 import (
+	"encoding/hex"
 	"time"
 
 	"golang.org/x/text/encoding/traditionalchinese"
@@ -11,6 +12,12 @@ func Big5ToUtf8(source []byte) (string, error) {
 	big5Toutf8 := traditionalchinese.Big5.NewDecoder()
 	str, _, err := transform.String(big5Toutf8, string(source))
 	return str, err
+}
+
+func Utf8ToBig5(source []byte) ([]byte, error) {
+	encoder := traditionalchinese.Big5.NewEncoder()
+	data, _, err := transform.Bytes(encoder, source)
+	return data, err
 }
 
 // 為了與 Js 統一時間單位的處理
@@ -48,4 +55,8 @@ func IsTransDate(startTime, endTime time.Time) bool {
 		return true
 	}
 	return false
+}
+
+func HexToByte(hexString string) ([]byte, error) {
+	return hex.DecodeString(hexString)
 }
