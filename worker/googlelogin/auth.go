@@ -9,8 +9,9 @@ import (
 	"net/http"
 	"net/url"
 	"strings"
-	"ycore/driver/encryption/jwt"
-	"ycore/module/myrestful"
+
+	"github.com/YWJSonic/ycore/driver/encryption/jwt"
+	"github.com/YWJSonic/ycore/module/myrestful"
 
 	"github.com/gin-gonic/gin"
 	"google.golang.org/api/sheets/v4"
