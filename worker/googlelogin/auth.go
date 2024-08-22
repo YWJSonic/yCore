@@ -1,6 +1,7 @@
 package googlelogin
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -47,20 +48,18 @@ func New() {
 
 func Router(router *myrestful.RestfulDriver) {
 	// router.LoadHTMLFiles("*.html")
-	router.LoadHTMLGlob("*.html")
+	router.LoadHTMLGlob("./worker/googlelogin/*.html")
 
 	router.Handle(http.MethodGet, "/", Home)
-	router.Handle(http.MethodGet, "/ouath/google/url", GoogleAccsess)
-	router.Handle(http.MethodGet, "/ouath/google/login", GoogleRedirectLogin)
-	router.Handle(http.MethodPost, "/ouath/google/login", GoogleLogin)
+
+	// 以不對外提供密鑰方式登入, 第一次取得權杖(code),使用權帳存取資料
+	router.Handle(http.MethodGet, "/login", HttpOptionLogin)                       // 跳轉登入
+	router.Handle(http.MethodGet, "/ouath/google/login", GoogleLoginRedirectGET)   // 前端 Google 工具登入回傳
+	router.Handle(http.MethodPost, "/ouath/google/login", GoogleLoginRedirectPOST) // Server 跳轉登入後返回資料
 }
 
 func Home(c *gin.Context) {
 	c.HTML(http.StatusOK, "index.html", nil)
-}
-
-func GoogleAccsess(c *gin.Context) {
-	c.Redirect(http.StatusPermanentRedirect, oauthURL())
 }
 
 func oauthURL() string {
@@ -70,22 +69,91 @@ func oauthURL() string {
 		"https://www.googleapis.com/auth/userinfo.email",
 	}
 
-	return fmt.Sprintf(u, config.Auth_uri, config.Client_id, strings.Join(scopes, "+"), config.Redirect_uris[0])
+	redirectUr := url.QueryEscape(config.Redirect_uris[0])
+	return fmt.Sprintf(u, config.Auth_uri, config.Client_id, strings.Join(scopes, "+"), redirectUr)
 }
 
-func GoogleRedirectLogin(c *gin.Context) {
-	fmt.Println(c.Request.URL)
-	querys, err := url.ParseQuery(c.Request.URL.RawQuery)
+func HttpOptionLogin(c *gin.Context) {
+
+	//     https://accounts.google.com/o/oauth2/auth?					client_id=14099599407-n78q9cn8eslht1ksculubui6oujn4mav.apps.googleusercontent.com&redirect_uri=http:%2F%2Flocalhost%2Fouath%2Fgoogle%2Flogin&response_type=code&scope=https://www.googleapis.com/auth/userinfo.profile+https://www.googleapis.com/auth/userinfo.email
+	// url := `https://accounts.google.com/o/oauth2/auth?client_id=14099599407-n78q9cn8eslht1ksculubui6oujn4mav.apps.googleusercontent.com&redirect_uri=http%3A%2F%2Flocalhost%2Fouath%2Fgoogle%2Flogin&scope=openid%20email%20profile&response_type=code&state=abcdef1234567890`
+	c.Redirect(http.StatusFound, oauthURL())
+}
+
+var (
+	clientSecret     = "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" // 替換為你的 Google 客戶端密鑰
+	tokenEndpoint    = "https://oauth2.googleapis.com/token"
+	userInfoEndpoint = "https://www.googleapis.com/oauth2/v3/userinfo"
+)
+
+func GoogleLoginRedirectGET(c *gin.Context) {
+	code := c.Query("code")
+
+	// 請求訪問令牌
+	data := url.Values{}
+	data.Set("code", code)
+	data.Set("client_id", config.Client_id)
+	data.Set("client_secret", clientSecret)
+	data.Set("redirect_uri", config.Redirect_uris[0])
+	data.Set("grant_type", "authorization_code")
+
+	req, err := http.NewRequest("POST", tokenEndpoint, bytes.NewBufferString(data.Encode()))
 	if err != nil {
-		c.JSON(http.StatusBadGateway, err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "創建請求時出錯"})
+		return
+	}
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "發送請求時出錯"})
+		return
+	}
+	defer resp.Body.Close()
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "讀取回應時出錯"})
 		return
 	}
 
-	c.JSON(http.StatusOK, querys)
+	var tokenResponse map[string]interface{}
+	if err := json.Unmarshal(body, &tokenResponse); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "解析訪問令牌回應時出錯"})
+		return
+	}
 
+	accessToken, ok := tokenResponse["access_token"].(string)
+	if !ok {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "無法獲取訪問令牌"})
+		return
+	}
+
+	// 使用訪問令牌請求用戶資訊
+	userInfoResp, err := http.Get(fmt.Sprintf("%s?access_token=%s", userInfoEndpoint, accessToken))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "請求用戶資訊時出錯"})
+		return
+	}
+	defer userInfoResp.Body.Close()
+
+	userInfoBody, err := io.ReadAll(userInfoResp.Body)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "讀取用戶資訊回應時出錯"})
+		return
+	}
+
+	var userInfo UserInfoDto
+	if err := json.Unmarshal(userInfoBody, &userInfo); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "解析用戶資訊回應時出錯"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"userInfo": userInfo})
 }
 
-func GoogleLogin(c *gin.Context) {
+func GoogleLoginRedirectPOST(c *gin.Context) {
 	b, err := io.ReadAll(c.Request.Body)
 	if err != nil {
 		log.Fatalln(err)
@@ -106,7 +174,7 @@ func GoogleLogin(c *gin.Context) {
 		return
 	}
 
-	jwtClimDto := &JwtClimDto{}
+	jwtClimDto := &UserInfoDto{}
 	if err = jwt.Decode(quarys[0], certMap, jwtClimDto); err != nil {
 		return
 	}
@@ -137,31 +205,3 @@ func GetCerts() (map[string]string, error) {
 	}
 	return certs, nil
 }
-
-var mockHtml = `<html>
-<body>
-<script src="https://accounts.google.com/gsi/client" async defer></script>
-<div id="g_id_onload"
-data-client_id="14099599407-n78q9cn8eslht1ksculubui6oujn4mav.apps.googleusercontent.com"
-data-context="signin"
-data-ux_mode="popup"
-data-login_uri="http://localhost/ouath/google/login"
-data-auto_prompt="false">
-</div>
-<div class="g_id_signin"
-data-type="standard"
-data-size="medium"
-data-theme="filled_blue"
-data-text="signin_with"
-data-shape="pill"
-data-callback="onSinbgIn" 
-data-logo_alignment="left">
-</div>
-<script>
-function onSinbgIn(googleUser){
-  var profile = googleUser.getBasicProfile();
-  print(googleUser.getBasicProfile().getEmail())
-}
-</script>
-</body>
-</html>`
